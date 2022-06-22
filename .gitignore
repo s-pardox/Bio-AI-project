@@ -3,3 +3,5 @@ venv/
 nas_gnn/
 __pycache__/
 my*
+lab/
+AML_project/

@@ -24,7 +24,7 @@ solver = AutoNodeClassifier(
 
     # hpo_module = 'anneal',
     # Let's use our own HPO module :-)
-    hpo_module=TestOptimizer(),
+    hpo_module=TestOptimizer(max_evals=2),
 
     # We can bypass it, for the moment.
     # ensemble_module = 'voting',
@@ -40,15 +40,15 @@ solver = AutoNodeClassifier(
             # In Bu et al.'s paper: P1 - continuous param in the [0.01,0,05] range.
             'parameterName': 'lr',
             'type': 'DOUBLE',
-            'maxValue': 1e-2,
-            'minValue': 5e-2,
+            'maxValue': 5e-2,
+            'minValue': 1e-2,
             'scalingType': 'LOG',
         },
         {
             # In Bu et al.'s paper: P2 - continuous param in the [0.0001,0.001] range.
             'parameterName': 'weight_decay',
             'type': 'DOUBLE',
-            'maxValue': 1e-2,
+            'maxValue': 1e-3,
             'minValue': 1e-4,
             'scalingType': 'LOG',
         },
@@ -120,15 +120,16 @@ solver = AutoNodeClassifier(
 # Split 0.2 of total nodes/graphs for train and 0.4 of nodes/graphs for validation,
 # the rest 0.4 is left for test.
 # time_limit: int
-# The time limit of the whole fit process (in seconds). If set below 0,
-# will ignore time limit. Default ``-1``.
+# The time limit of the whole fit process (in seconds). If set below 0, will ignore time limit. Default ``-1``.
 solver.fit(dataset, time_limit=120)
 
 # get current leaderboard of the solver
-# lb  =  solver.get_leaderboard()
+# lb=solver.get_leaderboard()
 # show the leaderboard info
 # lb.show()
 
 acc = solver.evaluate(metric='acc')
 
-print('\ntest acc: {:.4f}'.format(acc))
+print('\nTest accuracy: {:.4f}'.format(acc))
+
+print('\nbest_para = \n{}'.format(solver.hpo_module.best_para))
