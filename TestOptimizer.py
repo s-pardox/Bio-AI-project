@@ -107,22 +107,6 @@ class TestOptimizer(BaseHPOptimizer):
                     hps[para['parameterName']] = random.choice(feasible_points)
             return hps
 
-        def get_evolutionary(history_trials):
-            hps = {}
-            for para in current_space:
-
-                # Because we use _encode_para function before, we should only deal with DOUBLE, INTEGER and DISCRETE
-                if para['type'] == 'DOUBLE' or para['type'] == 'INTEGER':
-                    hp = random.random() * (para['maxValue'] - para['minValue']) + para['minValue']
-                    if para['type'] == 'INTEGER':
-                        hp = round(hp)
-                    hps[para['parameterName']] = hp
-
-                elif para['type'] == 'DISCRETE':
-                    feasible_points = para['feasiblePoints'].split(',')
-                    hps[para['parameterName']] = random.choice(feasible_points)
-            return hps
-
         # 4. Run your algorithm. For each turn, get a set of parameters according to history information and evaluate
         # it.
         best_trainer, best_para, best_perf = None, None, None
