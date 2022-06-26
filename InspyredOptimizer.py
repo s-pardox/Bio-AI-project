@@ -14,15 +14,15 @@ class InspyredOptimizer(BaseHPOptimizer):
         self.max_evals = kwargs.get('max_evals', 2)
 
         """For GCN model, chromosome is represented as:
-            H1: hidden_0
-            H2: hidden_1
-
-            P1: lr
-            P2: weight_decay
-            P3: dropout
-            P4: act
-            P5: max_epoch
-            P6: early_stopping_round
+            H1: hidden_0                [4,16]
+            H2: hidden_1                [4,16]
+            
+            P1: lr                      [1e-2, 5e-2]
+            P2: weight_decay            [1e-4, 1e-3]
+            P3: dropout                 [0.2, 0.8]
+            P4: act                     [0,3]
+            P5: max_epoch               [100,300]
+            P6: early_stopping_round    [10, 30]
             
             We have temporary fixed to '2' the number of hidden layers, letting evolve the number of hidden units for
             each layer (H1 and H2 parameters).
@@ -78,7 +78,7 @@ class InspyredOptimizer(BaseHPOptimizer):
             size = args.get('num_inputs', 10)
 
             # For each individual, due to the fact we cannot keep a key-value parameter pair, we'd like to
-            # keep the order of parameters at least, as specified in 'param_keys'
+            # keep the order of parameters at least, as specified in 'param_keys'.
             individual = []
             for param_key in self.param_keys:
 
@@ -195,7 +195,8 @@ class InspyredOptimizer(BaseHPOptimizer):
 
             return fitness
 
-        # Main outer training cycle controlled by Inspyred
+        """Main outer training cycle controlled by Inspyred.
+        """
         rand = random.Random()
         rand.seed(int(time.time()))
         ga = inspyred.ec.GA(rand)
@@ -208,7 +209,7 @@ class InspyredOptimizer(BaseHPOptimizer):
                               #
                               generator=generate_initial_population,
                               # Number of generations = max_evaluations / pop_size
-                              max_evaluations=300,
+                              max_evaluations=30,
                               #
                               num_elites=5,
                               # Population size

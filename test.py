@@ -79,21 +79,14 @@ solver = AutoNodeClassifier(
         # 'encoder'
         [
             {
-                # In Bu et al.'s paper: P3 - continuous param in the [0.2,0.8] range.
-                'parameterName': 'dropout',
-                'type': 'DOUBLE',
-                'maxValue': 0.8,
-                'minValue': 0.2,
-                'scalingType': 'LINEAR',
-            },
-            {
                 # We've temporarily fixed the number of layers to '3' (and consequently, accordingly with AutoGL's
-                # logic, to '2' the number of hidden layers.
+                # logic, to '2' the number of hidden layers).
                 'parameterName': 'num_layers',
                 'type': 'FIXED',
                 'value': 3,
             },
             {
+                # In Bu et al.'s paper: H1 - discrete param in the [4,16] range.
                 'parameterName': 'hidden',
                 'type': 'NUMERICAL_LIST',
                 'numericalType': 'INTEGER',
@@ -101,13 +94,27 @@ solver = AutoNodeClassifier(
                 'length': 2,
                 'minValue': [4, 4],
                 'maxValue': [16, 16],
-                'scalingType': 'LINEAR',
+
+                # TODO
+                # Accordingly to Bu et al.'s paper, the values have to be transformed as ln(H1)
+                # Does the LOG scale perform a 'ln' transformation?
+                'scalingType': 'LOG',
+                # 'scalingType': 'LINEAR',
+                
                 # By expliciting 'cutPara' we force HPO to cut the list to a certain length which is dependent on
                 # 'num_layers' param.
                 # As general rule:
                 #   len(hidden) = num_layers - 1
                 'cutPara': ('num_layers',),
                 'cutFunc': lambda x: x[0] - 1,
+            },
+            {
+                # In Bu et al.'s paper: P3 - continuous param in the [0.2,0.8] range.
+                'parameterName': 'dropout',
+                'type': 'DOUBLE',
+                'maxValue': 0.8,
+                'minValue': 0.2,
+                'scalingType': 'LINEAR',
             },
             {
                 # In Bu et al.'s paper: P4 - discrete categorical param.
