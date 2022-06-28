@@ -6,7 +6,7 @@ import time
 
 # autogl/module/hpo/base.py
 from autogl.module.hpo.base import BaseHPOptimizer
-from inspyred.ec import DiscreteBounder
+from inspyred.ec import Bounder, DiscreteBounder
 
 
 class ActDiscreteBounder(DiscreteBounder):
@@ -21,6 +21,13 @@ class ActDiscreteBounder(DiscreteBounder):
 
     def __call__(self, candidate, args):
         """Overrides the parent's __call__ method"""
+
+        # Upper-Lower bounds for Dropout Parameter (candidate[3])
+        if candidate[3] > 1:
+            candidate[3] = 1
+        elif candidate[3] < 0:
+            candidate[3] = 0
+
         closest = lambda target: min(self.values, key=lambda x: abs(x - target))
         candidate[4] = closest(candidate[4])
         return candidate
@@ -297,7 +304,7 @@ class InspyredOptimizer(BaseHPOptimizer):
             ga.terminator = inspyred.ec.terminators.generation_termination
             final_pop = ga.evolve(generator=generate_initial_population, 
                           evaluator=evaluate_candidates, 
-                          pop_size=25,
+                          pop_size=25, 
                           bounder=ActDiscreteBounder(range(0, 4)),
                           max_generations=30)
 
