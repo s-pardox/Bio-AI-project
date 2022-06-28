@@ -5,3 +5,4 @@ __pycache__/
 my*
 lab/
 AML_project/
+.vscode/
