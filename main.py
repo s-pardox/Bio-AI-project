@@ -24,7 +24,7 @@ solver = AutoNodeClassifier(
 
     # Let's use our own HPO module :-)
     # Available options: 'GA', 'PSO'.
-    hpo_module=InspyredOptimizer(alg='PSO'),
+    hpo_module=InspyredOptimizer(alg='NSGA2'),
 
     # We can bypass it, for the moment.
     # ensemble_module = 'voting',

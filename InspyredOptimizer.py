@@ -286,11 +286,33 @@ class InspyredOptimizer(BaseHPOptimizer):
 
             return final_pop
 
+
+        def NSGA2():
+            """Non-dominated Sorting Genetic Algorithm 2 Optimization"""
+
+            rand = random.Random()
+            rand.seed(int(time.time()))
+            ga = inspyred.ec.emo.NSGA2(rand)
+            ga.variator = [inspyred.ec.variators.blend_crossover, inspyred.ec.variators.gaussian_mutation]
+            ga.terminator = inspyred.ec.terminators.generation_termination
+            final_pop = ga.evolve(generator=generate_initial_population, 
+                          evaluator=evaluate_candidates, 
+                          pop_size=25,
+                          bounder=ActDiscreteBounder(range(0, 4)),
+                          max_generations=30)
+
+
+            return final_pop
+
+
         if self.alg == 'GA':
             final_pop = GA()
 
         elif self.alg == 'PSO':
             final_pop = PSO()
+
+        elif self.alg == 'NSGA2':
+            final_pop = NSGA2()
 
         # Instance of Individual class.
         best_individual_obj = max(final_pop)
