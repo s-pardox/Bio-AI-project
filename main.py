@@ -23,7 +23,7 @@ solver = AutoNodeClassifier(
     graph_models=['gcn'],
 
     # Let's use our own HPO module :-)
-    # Available options: 'GA', 'PSO'.
+    # Available options: 'GA', 'PSO', 'NSGA2'
     hpo_module=InspyredOptimizer(alg='NSGA2'),
 
     # We can bypass it, for the moment.

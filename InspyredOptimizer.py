@@ -9,28 +9,47 @@ from autogl.module.hpo.base import BaseHPOptimizer
 from inspyred.ec import Bounder, DiscreteBounder
 
 
-class ActDiscreteBounder(DiscreteBounder):
-    """This class is inherited from inspyred.ec.DiscreteBounder.
-    The original class defines a basic bounding function for numeric lists of discrete values.
-
-    In particular, here we need to constrain the discrete parameter 'act_' (which represents a specific activation
-    function) within a well-defined range of integer values.
+class SearchSpaceBounder:
+    """This class is inspired by inspyred.ec.Bounder/DiscreteBounder but has been completely rewritten in order to
+    push the AutoGL search space into the evolutionary process.
+    The original classes define a basic bounding function for numeric lists of discrete/continuous values.
     """
-    def __init__(self, values):
-        super().__init__(values)
+
+    # Parameters that, during the evolutionary cycle, have to correctly bounded before to be passed to the trainer.
+    to_bound = ['dropout_', 'act_']
+
+    def __init__(self, param_keys, current_space):
+        self.param_keys = param_keys
+        self.current_space = current_space
 
     def __call__(self, candidate, args):
-        """Overrides the parent's __call__ method"""
+        """
+        Input parameters:
+            candidate: a list that contains, in each position, a value representing a specific gene (the index of each
+                one is exactly the same of the param_keys list)
+            args: dictionary that contains Inspyred's evolutionary parameters (max_generations, num_selected, etc.)
+        """
+        for para in self.current_space:
+            if para['parameterName'] in self.to_bound:
+                i = self.param_keys.index(para['parameterName'])
 
-        # Upper-Lower bounds for Dropout Parameter (candidate[3])
-        if candidate[3] > 1:
-            candidate[3] = 1
-        elif candidate[3] < 0:
-            candidate[3] = 0
+                # Because we use _encode_para function before, we should only deal with DOUBLE, INTEGER and DISCRETE
+                if para['type'] == 'DOUBLE' or para['type'] == 'INTEGER':
+                    candidate[i] = max(min(candidate[i], para['maxValue']), para['minValue'])
 
-        closest = lambda target: min(self.values, key=lambda x: abs(x - target))
-        candidate[4] = closest(candidate[4])
+                    """
+                    Is it really necessary?
+                    if para['type'] == 'INTEGER':
+                        candidate[i] = round(candidate[i])
+                    """
+
+                elif para['type'] == 'DISCRETE':
+                    feasible_points = para['feasiblePoints'].split(',')
+                    closest = lambda target: min(feasible_points, key=lambda x: abs(int(x) - target))
+                    candidate[i] = int(closest(candidate[i]))
+
         return candidate
+
 
 class InspyredOptimizer(BaseHPOptimizer):
     # Get essential parameters at initialization.
@@ -41,14 +60,14 @@ class InspyredOptimizer(BaseHPOptimizer):
         self.alg = kwargs.get('alg', 'GA')
 
         """For GCN model, chromosome is represented as:
-            H1: hidden_0                [4,16]
+            0. H1: hidden_0                [4,16]
             
-            P1: lr                      [1e-2, 5e-2]
-            P2: weight_decay            [1e-4, 1e-3]
-            P3: dropout                 [0.2, 0.8]
-            P4: act                     [0,3]
-            P5: max_epoch               [100,300]
-            P6: early_stopping_round    [10, 30]
+            1. P1: lr                      [1e-2, 5e-2]
+            2. P2: weight_decay            [1e-4, 1e-3]
+            3. P3: dropout                 [0.2, 0.8]
+            4. P4: act                     [0,3]
+            5, P5: max_epoch               [100,300]
+            6. P6: early_stopping_round    [10, 30]
         """
         self.param_keys = ['hidden_0', 'lr_', 'weight_decay_', 'dropout_', 'act_', 'max_epoch_',
                            'early_stopping_round_']
@@ -247,8 +266,8 @@ class InspyredOptimizer(BaseHPOptimizer):
 
             return fitness
 
-        def GA():
-            """Classic genetic algorith"""
+        def GA(current_space):
+            """Classic genetic algorithm"""
 
             rand = random.Random()
             rand.seed(int(time.time()))
@@ -268,11 +287,13 @@ class InspyredOptimizer(BaseHPOptimizer):
                                   # Population size.
                                   pop_size=30,
                                   # Number of individuals that have to be generated as initial population.
-                                  num_inputs=10)
+                                  num_inputs=10,
+                                  #
+                                  bounder=SearchSpaceBounder(self.param_keys, current_space))
 
             return final_pop
 
-        def PSO():
+        def PSO(current_space):
             """Particle Swarm Optimization"""
 
             # Main outer training cycle controlled by Inspyred
@@ -289,12 +310,10 @@ class InspyredOptimizer(BaseHPOptimizer):
                                   pop_size=25,
                                   max_evaluations=100,
                                   neighborhood_size=5,
-                                  bounder=ActDiscreteBounder(range(0, 4)))
-
+                                  bounder=SearchSpaceBounder(self.param_keys, current_space))
             return final_pop
 
-
-        def NSGA2():
+        def NSGA2(current_space):
             """Non-dominated Sorting Genetic Algorithm 2 Optimization"""
 
             rand = random.Random()
@@ -305,21 +324,21 @@ class InspyredOptimizer(BaseHPOptimizer):
             final_pop = ga.evolve(generator=generate_initial_population, 
                           evaluator=evaluate_candidates, 
                           pop_size=25, 
-                          bounder=ActDiscreteBounder(range(0, 4)),
+                          bounder=SearchSpaceBounder(self.param_keys, current_space),
                           max_generations=30)
-
 
             return final_pop
 
+        current_space = self._encode_para(trainer.hyper_parameter_space + trainer.model.hyper_parameter_space)
 
         if self.alg == 'GA':
-            final_pop = GA()
+            final_pop = GA(current_space)
 
         elif self.alg == 'PSO':
-            final_pop = PSO()
+            final_pop = PSO(current_space)
 
         elif self.alg == 'NSGA2':
-            final_pop = NSGA2()
+            final_pop = NSGA2(current_space)
 
         # Instance of Individual class.
         best_individual_obj = max(final_pop)
