@@ -210,7 +210,7 @@ class InspyredOptimizer(BaseHPOptimizer):
             to reassign a key to each one, before to evaluate it with the trainer.
             """
             named_individual = {}
-            for i in range(0, len(individual)):
+            for i in range(0, len(individual) - 1):
                 if self.param_keys[i] == 'act_':
                     # TODO.
                     # Reverts the value from float to str, as needed by _decode_para method.
@@ -266,7 +266,7 @@ class InspyredOptimizer(BaseHPOptimizer):
 
             return fitness
 
-        def GA(current_space):
+        def GA():
             """Classic genetic algorithm"""
 
             rand = random.Random()
@@ -275,25 +275,21 @@ class InspyredOptimizer(BaseHPOptimizer):
             ga.observer = inspyred.ec.observers.stats_observer
             ga.terminator = inspyred.ec.terminators.evaluation_termination
 
-            print('\nRunning GA...')
+            return ga.evolve(evaluator=evaluate_candidates,
+                             #
+                             generator=generate_initial_population,
+                             # Number of generations = max_evaluations / pop_size.
+                             max_evaluations=30,
+                             #
+                             num_elites=5,
+                             # Population size.
+                             pop_size=30,
+                             # Number of individuals that have to be generated as initial population.
+                             num_inputs=10,
+                             #
+                             bounder=SearchSpaceBounder(self.param_keys, current_space))
 
-            final_pop = ga.evolve(evaluator=evaluate_candidates,
-                                  #
-                                  generator=generate_initial_population,
-                                  # Number of generations = max_evaluations / pop_size.
-                                  max_evaluations=30,
-                                  #
-                                  num_elites=5,
-                                  # Population size.
-                                  pop_size=30,
-                                  # Number of individuals that have to be generated as initial population.
-                                  num_inputs=10,
-                                  #
-                                  bounder=SearchSpaceBounder(self.param_keys, current_space))
-
-            return final_pop
-
-        def PSO(current_space):
+        def PSO():
             """Particle Swarm Optimization"""
 
             # Main outer training cycle controlled by Inspyred
@@ -303,42 +299,73 @@ class InspyredOptimizer(BaseHPOptimizer):
             ea.topology = inspyred.swarm.topologies.ring_topology
             ea.terminator = inspyred.ec.terminators.evaluation_termination
 
-            print('\nRunning PSO...')
+            return ea.evolve(evaluator=evaluate_candidates,
+                             generator=generate_initial_population,
+                             pop_size=25,
+                             max_evaluations=100,
+                             neighborhood_size=5,
+                             bounder=SearchSpaceBounder(self.param_keys, current_space))
 
-            final_pop = ea.evolve(evaluator=evaluate_candidates,
-                                  generator=generate_initial_population,
-                                  pop_size=25,
-                                  max_evaluations=100,
-                                  neighborhood_size=5,
-                                  bounder=SearchSpaceBounder(self.param_keys, current_space))
-            return final_pop
-
-        def NSGA2(current_space):
-            """Non-dominated Sorting Genetic Algorithm 2 Optimization"""
+        def DEA():
+            """Differential Evolution"""
 
             rand = random.Random()
             rand.seed(int(time.time()))
-            ga = inspyred.ec.emo.NSGA2(rand)
-            ga.variator = [inspyred.ec.variators.blend_crossover, inspyred.ec.variators.gaussian_mutation]
-            ga.terminator = inspyred.ec.terminators.generation_termination
-            final_pop = ga.evolve(generator=generate_initial_population, 
-                          evaluator=evaluate_candidates, 
-                          pop_size=25, 
-                          bounder=SearchSpaceBounder(self.param_keys, current_space),
-                          max_generations=30)
+            ea = inspyred.ec.DEA(rand)
+            ea.terminator = inspyred.ec.terminators.evaluation_termination
+            return ea.evolve(generator=generate_initial_population,
+                             evaluator=evaluate_candidates,
+                             pop_size=25,
+                             bounder=SearchSpaceBounder(self.param_keys, current_space),
+                             max_generations=30)
 
-            return final_pop
+        current_space = self._encode_para(trainer.hyper_parameter_space + trainer.model.hyper_parameter_space)
+
+        def ES_1():
+            """
+            (μ/ρ,λ)-ES Evolution Strategy:
+                - μ denotes the number of parents,
+                - ρ ≤ μ the number of parents involved in the producing a single offspring (mixing number),
+                - λ the number of offspring,
+                - comma selection strategy.
+
+            When we use a comma strategy we forget the previous solutions: every time we replace the μ parents, with
+            the λ offspring, and from the λ offspring we generate the new parents. So we completely forget
+            the previous parents. On the one hand, this allows us to remove bad solutions, forcing the algorithm to be
+            less exploitative and more explorative.
+            This could be useful in the cases in which we’ve a moving optimum, and we need to forget the previous
+            better solutions.
+            """
+
+            rand = random.Random()
+            rand.seed(int(time.time()))
+            ea = inspyred.ec.ES(rand)
+            ea.terminator = [inspyred.ec.terminators.evaluation_termination,
+                             inspyred.ec.terminators.diversity_termination]
+            return ea.evolve(generator=generate_initial_population,
+                             evaluator=evaluate_candidates,
+                             # mu parameter, as defined in Bu et al.'s paper
+                             pop_size=100,
+                             bounder=SearchSpaceBounder(self.param_keys, current_space),
+                             max_generations=2)
 
         current_space = self._encode_para(trainer.hyper_parameter_space + trainer.model.hyper_parameter_space)
 
         if self.alg == 'GA':
-            final_pop = GA(current_space)
+            print('\nRunning GA...')
+            final_pop = GA()
 
         elif self.alg == 'PSO':
-            final_pop = PSO(current_space)
+            print('\nRunning PSO...')
+            final_pop = PSO()
 
-        elif self.alg == 'NSGA2':
-            final_pop = NSGA2(current_space)
+        elif self.alg == 'DEA':
+            print('\nRunning DEA...')
+            final_pop = DEA()
+
+        elif self.alg == 'ES_1':
+            print('\nRunning (μ/ρ,λ)-ES Evolution Strategy:')
+            final_pop = ES_1()
 
         # Instance of Individual class.
         best_individual_obj = max(final_pop)
