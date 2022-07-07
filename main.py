@@ -23,8 +23,8 @@ solver = AutoNodeClassifier(
     graph_models=['gcn'],
 
     # Let's use our own HPO module :-)
-    # Available options: 'GA', 'PSO', 'DEA', 'ES_1'
-    hpo_module=InspyredOptimizer(alg='ES_1'),
+    # Available options: 'GA', 'PSO', 'DEA', 'ES_1', 'CMA-ES'
+    hpo_module=InspyredOptimizer(alg='CMA-ES'),
 
     # We can bypass it, for the moment.
     # ensemble_module = 'voting',
