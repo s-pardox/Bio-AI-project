@@ -4,7 +4,6 @@ from autogl.datasets import build_dataset_from_name
 from autogl.solver import AutoNodeClassifier
 
 from TestOptimizer import *
-from InspyredOptimizer import InspyredOptimizer
 
 dataset = build_dataset_from_name('cora')
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -24,9 +23,8 @@ solver = AutoNodeClassifier(
     graph_models=['gcn'],
 
     # hpo_module = 'anneal',
-    # Let's use our own HPO module :-)
-    # hpo_module=TestOptimizer(max_evals=4),
-    hpo_module=InspyredOptimizer(),
+    # Let's use our own HPO test module :-)
+    hpo_module=TestOptimizer(max_evals=4),
 
     # We can bypass it, for the moment.
     # ensemble_module = 'voting',
@@ -79,31 +77,29 @@ solver = AutoNodeClassifier(
         # 'encoder'
         [
             {
-                # We've temporarily fixed the number of layers to '3' (and consequently, accordingly with AutoGL's
-                # logic, to '2' the number of hidden layers).
+                # This is exactly the default parameter defined in the GCN model itself.
                 'parameterName': 'num_layers',
-                'type': 'FIXED',
-                'value': 3,
+                'type': 'DISCRETE',
+                'feasiblePoints': '2,3,4',
             },
             {
                 # In Bu et al.'s paper: H1 - discrete param in the [4,16] range.
+                # TO CLARIFY: Does it refer to the Number of Hidden Units _per layer_?
+                # Yes, it does:
+                #   [ "GCN, the number of layers in the convolution structure was fixed, and only the number of units in
+                #   the hidden layer (H1) was adjusted." ]
                 'parameterName': 'hidden',
                 'type': 'NUMERICAL_LIST',
                 'numericalType': 'INTEGER',
                 # Has to be considered as 'max length'.
-                'length': 2,
-                'minValue': [4, 4],
-                'maxValue': [16, 16],
-
-                # TODO
-                # Accordingly to Bu et al.'s paper, the values have to be transformed as ln(H1)
-                # Does the LOG scale perform a 'ln' transformation?
-                'scalingType': 'LOG',
-                # 'scalingType': 'LINEAR',
-                
+                'length': 3,
+                'minValue': [4, 4, 4],
+                'maxValue': [16, 16, 16],
+                'scalingType': 'LINEAR',
                 # By expliciting 'cutPara' we force HPO to cut the list to a certain length which is dependent on
-                # 'num_layers' param.
-                # As general rule:
+                # 'num_layers' param. For example, let's assume that, among the available num_layers' values [2,3,4],
+                # the value '4' has been selected. In this case the 'hidden' numerical list will be full (equals to 3)-
+                # So, as general rule:
                 #   len(hidden) = num_layers - 1
                 'cutPara': ('num_layers',),
                 'cutFunc': lambda x: x[0] - 1,
@@ -134,7 +130,6 @@ solver = AutoNodeClassifier(
 # The time limit of the whole fit process (in seconds). If set below 0, will ignore time limit. Default ``-1``.
 solver.fit(dataset, time_limit=120)
 
-"""
 # get current leaderboard of the solver
 # lb=solver.get_leaderboard()
 # show the leaderboard info
@@ -144,35 +139,3 @@ acc = solver.evaluate(metric='acc')
 
 print('\nTest accuracy: {:.4f}'.format(acc))
 print('\nbest_para = \n{}'.format(solver.hpo_module.best_para))
-"""
-
-"""
-{
-    # This is exactly the default parameter defined in the GCN model itself.
-    'parameterName': 'num_layers',
-    'type': 'DISCRETE',
-    'feasiblePoints': '2,3,4',
-},
-{
-    # In Bu et al.'s paper: H1 - discrete param in the [4,16] range.
-    # TO CLARIFY: Does it refer to the Number of Hidden Units _per layer_?
-    # Yes, it does:
-    #   [ "GCN, the number of layers in the convolution structure was fixed, and only the number of units in
-    #   the hidden layer (H1) was adjusted." ]
-    'parameterName': 'hidden',
-    'type': 'NUMERICAL_LIST',
-    'numericalType': 'INTEGER',
-    # Has to be considered as 'max length'.
-    'length': 3,
-    'minValue': [4, 4, 4],
-    'maxValue': [16, 16, 16],
-    'scalingType': 'LINEAR',
-    # By expliciting 'cutPara' we force HPO to cut the list to a certain length which is dependent on
-    # 'num_layers' param. For example, let's assume that, among the available num_layers' values [2,3,4],
-    # the value '4' has been selected. In this case the 'hidden' numerical list will be full (equals to 3)-
-    # So, as general rule:
-    #   len(hidden) = num_layers - 1 
-    'cutPara': ('num_layers',),
-    'cutFunc': lambda x: x[0] - 1,
-},
-"""

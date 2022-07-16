@@ -6,3 +6,6 @@ my*
 lab/
 AML_project/
 .vscode/
+outcmaes/
+requirements.txt
+autogl_ea/settings/wandb_settings.py
