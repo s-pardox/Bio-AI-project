@@ -13,8 +13,8 @@ def launch(alg, dataset='cora', graph_model=['gcn']):
         optimizer = GA()
     elif alg == 'PSO':
         optimizer = PSO()
-    elif alg == 'DEA':
-        optimizer = DEA()
+    elif alg == 'DE':
+        optimizer = DE()
     elif alg == 'ES':
         optimizer = ES()
     elif alg == 'CMA-ES':

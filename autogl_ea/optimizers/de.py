@@ -8,7 +8,7 @@ from autogl_ea.utils import EASupport
 from autogl_ea.utils import SearchSpaceBounder
 
 
-class DEA(HPOptimizer):
+class DE(HPOptimizer):
     """Differential Evolution"""
 
     def __init__(self, *args, **kwargs):
@@ -24,7 +24,7 @@ class DEA(HPOptimizer):
         It inherits from HPOptimizer.
         """
 
-        print('\nRunning DEA...')
+        print('\nRunning DE...')
         super().optimize(trainer, dataset, time_limit, memory_limit)
 
         rand = random.Random()
@@ -37,9 +37,9 @@ class DEA(HPOptimizer):
         pop_generator = ea_support.generate_initial_population
         ssb = SearchSpaceBounder(self.current_space)
 
-        final_pop = ea.evolve(generator=ea_support.generate_initial_population,
+        final_pop = ea.evolve(generator=pop_generator,
                               #
-                              evaluator=pop_generator,
+                              evaluator=self.evaluate_candidates,
                               # Population size.
                               pop_size=25,
                               # Search Space bounder.

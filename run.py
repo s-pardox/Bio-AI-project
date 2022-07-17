@@ -20,9 +20,9 @@ def main():
     """
 
     # TODO.
-    # Available options for 'alg': 'GA', 'PSO', 'DEA', 'ES', 'CMA-ES'
+    # Available options for 'alg': 'GA', 'PSO', 'DE', 'ES', 'CMA-ES'
     # Here we should choose the dataset, the graph model, etc.
-    app.launch(alg='PSO', dataset='cora', graph_model=['gcn'])
+    app.launch(alg='GA', dataset='cora', graph_model=['gcn'])
 
 
 if __name__ == '__main__':
