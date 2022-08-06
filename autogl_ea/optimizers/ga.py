@@ -34,7 +34,7 @@ class GA(HPOptimizer):
         ga.observer = inspyred.ec.observers.stats_observer
         ga.terminator = inspyred.ec.terminators.evaluation_termination
 
-        ea_support = EASupport(self.current_space)
+        ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population
 
         final_pop = ga.evolve(evaluator=self.evaluate_candidates,

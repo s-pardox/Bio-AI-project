@@ -1,10 +1,8 @@
-from autogl_ea.settings import search_space as ss
-
-
 class EASupport:
 
-    def __init__(self, current_space):
-        self.current_space = current_space
+    def __init__(self, search_space, design_variables):
+        self.search_space = search_space
+        self.design_variables = design_variables
 
     def generate_initial_population(self, random, args):
         """Initializes the initial population.
@@ -39,9 +37,9 @@ class EASupport:
         # For each individual, due to the fact we cannot keep a key-value parameter pair, we'd like to
         # keep the order of parameters at least, as specified in PARAM_KEYS.
         individual = []
-        for param_key in ss.PARAM_KEYS:
+        for param_key in self.design_variables:
 
-            for para in self.current_space:
+            for para in self.search_space:
                 if para['parameterName'] == param_key:
 
                     # Because we use _encode_para function before, we should only deal with DOUBLE, INTEGER and

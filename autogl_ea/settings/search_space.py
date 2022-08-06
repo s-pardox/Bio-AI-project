@@ -1,13 +1,14 @@
-PARAM_KEYS = ['hidden_0', 'lr_', 'weight_decay_', 'dropout_', 'act_', 'max_epoch_', 'early_stopping_round_']
+# Default design variables names (with a default number of hidden layers equals to 1).
+DESIGN_VARIABLES = ['hidden_0', 'lr_', 'weight_decay_', 'dropout_', 'act_', 'max_epoch_', 'early_stopping_round_']
 
 """For GCN model, chromosome is represented as:
-    0. H1: hidden_0                [4,16]
+    0. H1: hidden_0                [4, 16]
 
     1. P1: lr                      [1e-2, 5e-2]
     2. P2: weight_decay            [1e-4, 1e-3]
     3. P3: dropout                 [0.2, 0.8]
-    4. P4: act                     [0,3]
-    5, P5: max_epoch               [100,300]
+    4. P4: act                     [0, 3]
+    5, P5: max_epoch               [100, 300]
     6. P6: early_stopping_round    [10, 30]
 """
 SEARCH_SPACE = {
@@ -50,9 +51,8 @@ SEARCH_SPACE = {
         [
             # 'encoder'
             {
-                # TODO
                 # We've temporarily fixed the number of layers to '2' (and consequently, to '1' the number of hidden
-                # layers).
+                # layers). It can be easily modified using command line arguments.
                 'parameterName': 'num_layers',
                 'type': 'FIXED',
                 'value': 2,
@@ -67,7 +67,6 @@ SEARCH_SPACE = {
                 'minValue': [4],
                 'maxValue': [16],
 
-                # TODO
                 # Accordingly to Bu et al.'s paper, the values have to be transformed as ln(H1)
                 # Does the LOG scale perform a 'ln' transformation? Yes, it does.
                 'scalingType': 'LOG',

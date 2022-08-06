@@ -42,7 +42,7 @@ class CMA_ES(HPOptimizer):
         num_inputs = 20
         max_generations = 2
 
-        ea_support = EASupport(self.current_space)
+        ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population(rand, {'num_inputs': num_inputs})
         ssb = SearchSpaceBounder(self.current_space)
 

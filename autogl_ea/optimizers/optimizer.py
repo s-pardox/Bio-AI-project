@@ -1,6 +1,8 @@
 # autogl/module/hpo/base.py
 from autogl.module.hpo.base import BaseHPOptimizer
-from autogl_ea.settings import search_space as ss
+
+import autogl_ea.settings.search_space as ss
+from autogl_ea.utils.search_space import SearchSpaceMng
 
 
 class HPOptimizer(BaseHPOptimizer):
@@ -9,14 +11,13 @@ class HPOptimizer(BaseHPOptimizer):
         super().__init__(*args, **kwargs)
 
         self.max_evals = kwargs.get('max_evals', 2)
-        # Default value.
-        self.alg = kwargs.get('alg', 'GA')
 
         # The following instance variables are going to be set in the optimize method.
         self.trainer = None
         self.dataset = None
         self.space = None
         self.current_space = None
+        self.design_variables = None
 
         self.best_trainer = None
         self.best_para = None
@@ -82,12 +83,12 @@ class HPOptimizer(BaseHPOptimizer):
         """
         named_individual = {}
         for i in range(0, len(individual)):
-            if ss.PARAM_KEYS[i] == 'act_':
+            if self.design_variables[i] == 'act_':
                 # TODO.
                 # Reverts the value from float to str, as needed by _decode_para method.
-                named_individual[ss.PARAM_KEYS[i]] = str(individual[i])
+                named_individual[self.design_variables[i]] = str(individual[i])
             else:
-                named_individual[ss.PARAM_KEYS[i]] = individual[i]
+                named_individual[self.design_variables[i]] = individual[i]
 
         # Decode.
         para_for_trainer, para_for_hpo = self._decode_para(named_individual)
@@ -102,7 +103,7 @@ class HPOptimizer(BaseHPOptimizer):
 
         loss, self.is_higher_better = current_trainer.get_valid_score(self.dataset)
 
-        """                
+        """
         # For convenience, we change the score which is higher better to negative, then we should only minimize
         # the score.
         if self.is_higher_better:
@@ -165,6 +166,11 @@ class HPOptimizer(BaseHPOptimizer):
 
         # _encode_para method is inherited from BaseHPOptimizer super class.
         self.current_space = super()._encode_para(self.space)
+
+        # Gets the design variables names, accordingly to the actual search space architecture and, in particular,
+        # to the number of hidden layers.
+        ss_mng = SearchSpaceMng(self.space)
+        self.design_variables = ss_mng.modify_dv_by_hl(ss.DESIGN_VARIABLES)
 
         """
             Inherit this method and enter the optimization logic of the genetic algorithm here...

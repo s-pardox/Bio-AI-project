@@ -1,14 +1,14 @@
 import torch
 
-from autogl_ea.settings import search_space as ss
-
 from autogl.datasets import build_dataset_from_name
 from autogl.solver import AutoNodeClassifier
 
+from autogl_ea.settings import search_space as ss
+from autogl_ea.utils import SearchSpaceMng
 from autogl_ea.optimizers import *
 
 
-def launch(alg, dataset='cora', graph_model=['gcn']):
+def launch(alg, dataset='cora', graph_model=None, hidden_layers=1):
     if alg == 'GA':
         optimizer = GA()
     elif alg == 'PSO':
@@ -19,14 +19,24 @@ def launch(alg, dataset='cora', graph_model=['gcn']):
         optimizer = ES()
     elif alg == 'CMA-ES':
         optimizer = CMA_ES()
+    else:
+        # Default.
+        optimizer = GA()
+
+    if graph_model is None:
+        graph_model = ['gcn']
 
     dataset = build_dataset_from_name(dataset)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    __solve(optimizer, dataset, graph_model, device)
+    # Eventually modifies the search space, altering the number of hidden layers in the NN.
+    ss_mng = SearchSpaceMng(ss.SEARCH_SPACE)
+    search_space = ss_mng.modify_ss_by_hl(hidden_layers)
+
+    __solve(optimizer, dataset, graph_model, search_space, device)
 
 
-def __solve(optimizer, dataset, graph_model, device):
+def __solve(optimizer, dataset, graph_model, search_space, device):
     # Take a look to autogl/solver/base.py and, in particular, to node_classifier.py, in the same folder (the file
     # contains the AutoNodeClassifier class, that technically is labeled as 'solver').
     solver = AutoNodeClassifier(
@@ -55,12 +65,12 @@ def __solve(optimizer, dataset, graph_model, device):
         # https://autogl.readthedocs.io/en/latest/docfile/tutorial/t_hpo.html#search-space
         # The following trainer's parameters (valued as the ones defined in Bu et al.'s paper) are passed to
         # AutoNodeClassifier (node_classifier.py), overwriting the default ones.
-        trainer_hp_space=ss.SEARCH_SPACE['trainer_hp_space'],
+        trainer_hp_space=search_space['trainer_hp_space'],
 
         # The following trainer's parameters (valued as the ones defined in Bu et al.'s paper) are passed to
         # the GCN model (autogl/module/model/encoders/_dgl/_gcn.py), passing through the AutoNodeClassifier
         # (node_classifier.py) solver, overwriting the default ones.
-        model_hp_spaces=ss.SEARCH_SPACE['model_hp_space']
+        model_hp_spaces=search_space['model_hp_space']
     )
 
     # As default behavior, splits 0.2 of total nodes/graphs for train and 0.4 of nodes/graphs for validation,

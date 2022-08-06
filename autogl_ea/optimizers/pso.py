@@ -34,7 +34,7 @@ class PSO(HPOptimizer):
         ea.topology = inspyred.swarm.topologies.ring_topology
         ea.terminator = inspyred.ec.terminators.evaluation_termination
 
-        ea_support = EASupport(self.current_space)
+        ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population
         ssb = SearchSpaceBounder(self.current_space)
 
