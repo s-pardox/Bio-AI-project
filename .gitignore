@@ -9,3 +9,4 @@ AML_project/
 outcmaes/
 requirements.txt
 autogl_ea/settings/wandb_settings.py
+wandb/
