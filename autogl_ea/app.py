@@ -8,7 +8,7 @@ from autogl_ea.utils import SearchSpaceMng
 from autogl_ea.optimizers import *
 
 
-def launch(alg, dataset='cora', graph_model=None, hidden_layers=1, problem='node'):
+def launch(alg='GA', dataset='cora', graph_model=None, hidden_layers=1, problem='node'):
     if alg == 'GA':
         optimizer = GA()
     elif alg == 'PSO':
@@ -19,9 +19,6 @@ def launch(alg, dataset='cora', graph_model=None, hidden_layers=1, problem='node
         optimizer = ES()
     elif alg == 'CMA-ES':
         optimizer = CMA_ES()
-    else:
-        # Default.
-        optimizer = GA()
 
     if graph_model is None:
         graph_model = ['gcn']
@@ -86,8 +83,8 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
             hpo_module=optimizer,
             device=device,
             max_evals=5,
-            trainer_hp_space=ss.SEARCH_SPACE['trainer_hp_space'],
-            model_hp_spaces=ss.SEARCH_SPACE['model_hp_space']
+            trainer_hp_space=search_space['trainer_hp_space'],
+            model_hp_spaces=search_space['model_hp_space']
         )
 
         solver.fit(dataset, time_limit=120, train_split=0.8, val_split=0.2)
@@ -108,5 +105,18 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
 
     acc = solver.evaluate(metric='acc')
 
+    best_individual = solver.hpo_module.best_para
+
     print('\nTest accuracy: {:.4f}'.format(acc))
-    print('\nbest_para = \n{}'.format(solver.hpo_module.best_para))
+    print('\nRaw evolved best individual:\n{}'.format(best_individual))
+
+    named_individual = solver.hpo_module.gen_named_individual(best_individual)
+    print('\nRaw evolved named individual:\n{}'.format(named_individual))
+
+    para_for_trainer, para_for_hpo = solver.hpo_module._decode_para(named_individual)
+    print('\nAutoGL decoded parameters for trainer:\n{}'.format(para_for_trainer))
+    print('\nAutoGL decoded parameters for HPO:\n{}'.format(para_for_hpo))
+
+    rearranged_params = solver.hpo_module.rearrange_params(para_for_trainer)
+    print('\nRearranged parameters (as requested by the AutoGL optimizer):\n{}'.format(rearranged_params))
+

@@ -25,7 +25,7 @@ class HPOptimizer(BaseHPOptimizer):
         # TODO.
         self.maximize = False
 
-    def __rearrange_params(self, para):
+    def rearrange_params(self, para):
         """Copied and pasted from node_classifier.py:
         hp: ``dict``.
             The hyperparameter used in the new instance. Should contain 3 keys "trainer", "encoder"
@@ -70,14 +70,7 @@ class HPOptimizer(BaseHPOptimizer):
             'decoder': {}
         }
 
-    def __fit(self, individual):
-        """Receives a list of hyperparameters (a genetic representation of an individual) to fit the model with.
-
-        Returns:
-            1. the performance in the [0,1] range;
-            2. an instance of the trainer.
-        """
-
+    def gen_named_individual(self, individual):
         """Because the candidate solution is composed by unnamed genes (simply a list of values), we have first
         to reassign a key to each one, before to evaluate it with the trainer.
         """
@@ -90,10 +83,23 @@ class HPOptimizer(BaseHPOptimizer):
             else:
                 named_individual[self.design_variables[i]] = individual[i]
 
+        return named_individual
+
+    def fit(self, individual):
+        """Receives a list of hyperparameters (a genetic representation of an individual) to fit the model with.
+
+        Returns:
+            1. the performance in the [0,1] range;
+            2. an instance of the trainer.
+        """
+
+        # Assigns a key to every gene.
+        named_individual = self.gen_named_individual(individual)
+
         # Decode.
         para_for_trainer, para_for_hpo = self._decode_para(named_individual)
         # Rearrange.
-        rearranged_params = self.__rearrange_params(para_for_trainer)
+        rearranged_params = self.rearrange_params(para_for_trainer)
 
         # The method returns a new instance of the trainer
         # (e.g.: NodeClassificationFullTrainer, solver/classifier/node_classifier.py),
@@ -138,14 +144,14 @@ class HPOptimizer(BaseHPOptimizer):
         fitness = []
         for individual in candidates:
             # Evaluates the model using the evolved parameters.
-            perf, _ = self.__fit(individual)
+            perf, _ = self.fit(individual)
             fitness.append(perf)
 
         return fitness
 
     def evaluate_candidate(self, individual):
         """Evaluates a single candidate by running a training cycle and getting the training performance."""
-        return self.__fit(individual)
+        return self.fit(individual)
 
     def optimize(self, trainer, dataset, time_limit=None, memory_limit=None):
         """This method is automatically invoked by AutoGL; has to be considered the entry point of the optimization
@@ -187,11 +193,13 @@ class HPOptimizer(BaseHPOptimizer):
         best_fitness = best_individual_obj.fitness
 
         # Re-runs the model with the best parameters.
-        perf, best_trainer = self.__fit(best_individual)
+        perf, best_trainer = self.fit(best_individual)
 
         # We need, also, to set these instance variables to let the Solver access them.
         self.best_trainer = best_trainer
         self.best_para = best_individual
+
+
 
         for ind in final_pop:
             print(str(ind))
