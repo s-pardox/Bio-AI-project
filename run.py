@@ -11,7 +11,7 @@ import argparse
 import wandb
 
 import autogl_ea.app as app
-import autogl_ea.settings.wandb_settings
+#import autogl_ea.settings.wandb_settings
 
 AVAILABLE_ALG = {
     'GA': 'Genetic Algorithm',
@@ -31,6 +31,7 @@ def main():
     parser.add_argument('-dataset', type=str, default='cora', help='Options: cora, ..; default=cora')
     parser.add_argument('-graph_model', type=str, default='gcn', help='Options: gcn, ..; default=gcn')
     parser.add_argument('-hl', type=int, default=2, help='The number of hidden layers to be used; default=1')
+    parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph')
 
     parser.add_argument('-wandb', type=bool, default=False, help='Log results on WandB (default=False)')
 
@@ -47,22 +48,24 @@ def main():
     assert args.dataset in ['cora'], 'Dataset not found.'
     assert args.graph_model in ['gcn'], 'Graph model not found.'
     assert 10 >= args.hl >= 1, 'Invalid number of hidden layers.'
+    assert args.problem in ['node', 'graph'], 'Kind of problem not found.'
 
     # Parameters got from the command line parser.
     alg = args.alg
     dataset = args.dataset
     graph_model = args.graph_model
     hl = args.hl
+    problem = args.problem
 
     # You need to edit settings/wandb_settings.py, specifying WANDB_ENTITY (username), WANDB_API_KEY, etc.
-    wandb.init(project='AutoGL-EA', name='alg: {}, ds: {}, gm: {}, hl: {}'.format(alg, dataset, graph_model, hl),
+    wandb.init(project='AutoGL-EA', name='alg: {}, ds: {}, gm: {}, hl: {}, problem: {}'.format(alg, dataset, graph_model, hl, problem),
                entity='bio-ai-2022', group='Initial test')
 
     # Command line launcher.
-    # app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layer=hl)
+    # app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layer=hl, problem=problem)
 
     # Manual launcher.
-    app.launch(alg='GA', dataset='cora', graph_model=['gcn'], hidden_layers=1)
+    app.launch(alg='GA', dataset='MUTAG', graph_model=['gcn'], hidden_layers=1, problem='graph')
 
 
 if __name__ == '__main__':

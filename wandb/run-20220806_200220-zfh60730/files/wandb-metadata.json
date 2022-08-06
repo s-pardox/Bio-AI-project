@@ -1,0 +1,24 @@
+{
+    "os": "Windows-10-10.0.19042-SP0",
+    "python": "3.9.12",
+    "heartbeatAt": "2022-08-06T18:02:21.408410",
+    "startedAt": "2022-08-06T18:02:20.471408",
+    "docker": null,
+    "gpu": "GeForce MX150",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "C:\\Users\\flori\\OneDrive\\Desktop\\Data Science\\Bio-Inspired AI\\Project\\Bio-AI-project\\run.py",
+    "codePath": "run.py",
+    "git": {
+        "remote": "https://github.com/s-pardox/Bio-AI-project.git",
+        "commit": "afb38cef28a760474fc0c2a9537dfd508c4c0091"
+    },
+    "email": "55547136+Mattia921@users.noreply.github.com",
+    "root": "C:/Users/flori/OneDrive/Desktop/Data Science/Bio-Inspired AI/Project/Bio-AI-project",
+    "host": "LAPTOP-7N7HCS8T",
+    "username": "flori",
+    "executable": "C:\\Users\\flori\\anaconda3\\envs\\bio_venv\\python.exe"
+}

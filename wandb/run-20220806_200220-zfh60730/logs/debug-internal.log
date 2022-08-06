@@ -1,0 +1,176 @@
+2022-08-06 20:02:20,506 INFO    StreamThr :10172 [internal.py:wandb_internal():90] W&B internal server running at pid: 10172, started at: 2022-08-06 20:02:20.505408
+2022-08-06 20:02:20,509 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: status
+2022-08-06 20:02:20,515 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: status
+2022-08-06 20:02:20,519 DEBUG   SenderThread:10172 [sender.py:send():302] send: header
+2022-08-06 20:02:20,520 INFO    WriterThread:10172 [datastore.py:open_for_write():75] open: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\run-zfh60730.wandb
+2022-08-06 20:02:20,631 DEBUG   SenderThread:10172 [sender.py:send():302] send: run
+2022-08-06 20:02:21,185 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: check_version
+2022-08-06 20:02:21,187 INFO    SenderThread:10172 [dir_watcher.py:__init__():216] watching files in: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files
+2022-08-06 20:02:21,187 INFO    SenderThread:10172 [sender.py:_start_run_threads():913] run started: zfh60730 with start time 1659808940.507413
+2022-08-06 20:02:21,188 DEBUG   SenderThread:10172 [sender.py:send():302] send: summary
+2022-08-06 20:02:21,189 INFO    SenderThread:10172 [sender.py:_save_file():1156] saving file wandb-summary.json with policy end
+2022-08-06 20:02:21,190 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: check_version
+2022-08-06 20:02:21,375 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: run_start
+2022-08-06 20:02:21,408 DEBUG   HandlerThread:10172 [meta.py:__init__():35] meta init
+2022-08-06 20:02:21,408 DEBUG   HandlerThread:10172 [meta.py:__init__():50] meta init done
+2022-08-06 20:02:21,408 DEBUG   HandlerThread:10172 [meta.py:probe():216] probe
+2022-08-06 20:02:21,539 DEBUG   HandlerThread:10172 [meta.py:_setup_git():206] setup git
+2022-08-06 20:02:21,981 DEBUG   HandlerThread:10172 [meta.py:_setup_git():213] setup git done
+2022-08-06 20:02:21,981 DEBUG   HandlerThread:10172 [meta.py:_save_pip():54] save pip
+2022-08-06 20:02:21,988 DEBUG   HandlerThread:10172 [meta.py:_save_pip():68] save pip done
+2022-08-06 20:02:21,988 DEBUG   HandlerThread:10172 [meta.py:_save_conda():75] save conda
+2022-08-06 20:02:22,013 ERROR   HandlerThread:10172 [meta.py:_save_conda():84] Error saving conda packages
+Traceback (most recent call last):
+  File "C:\Users\flori\anaconda3\envs\bio_venv\lib\site-packages\wandb\sdk\internal\meta.py", line 80, in _save_conda
+    subprocess.call(
+  File "C:\Users\flori\anaconda3\envs\bio_venv\lib\subprocess.py", line 349, in call
+    with Popen(*popenargs, **kwargs) as p:
+  File "C:\Users\flori\anaconda3\envs\bio_venv\lib\subprocess.py", line 951, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\flori\anaconda3\envs\bio_venv\lib\subprocess.py", line 1420, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+FileNotFoundError: [WinError 2] Impossibile trovare il file specificato
+2022-08-06 20:02:22,016 DEBUG   HandlerThread:10172 [meta.py:_save_conda():85] save conda done
+2022-08-06 20:02:22,016 DEBUG   HandlerThread:10172 [meta.py:probe():254] probe done
+2022-08-06 20:02:22,177 DEBUG   SenderThread:10172 [sender.py:send():302] send: files
+2022-08-06 20:02:22,178 INFO    SenderThread:10172 [sender.py:_save_file():1156] saving file wandb-metadata.json with policy now
+2022-08-06 20:02:22,205 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_created():275] file/dir created: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\wandb-metadata.json
+2022-08-06 20:02:22,207 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_created():275] file/dir created: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\conda-environment.yaml
+2022-08-06 20:02:22,207 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_created():275] file/dir created: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\wandb-summary.json
+2022-08-06 20:02:22,208 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_created():275] file/dir created: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\requirements.txt
+2022-08-06 20:02:22,250 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: stop_status
+2022-08-06 20:02:22,250 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: stop_status
+2022-08-06 20:02:22,509 DEBUG   SenderThread:10172 [sender.py:send():302] send: telemetry
+2022-08-06 20:02:22,982 INFO    Thread-22 :10172 [upload_job.py:push():138] Uploaded file C:\Users\flori\AppData\Local\Temp\tmpqkv55zq1wandb\3e4s76of-wandb-metadata.json
+2022-08-06 20:02:23,219 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_created():275] file/dir created: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\output.log
+2022-08-06 20:02:25,242 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_modified():292] file/dir modified: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\output.log
+2022-08-06 20:02:37,360 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_modified():292] file/dir modified: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\output.log
+2022-08-06 20:02:37,517 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: stop_status
+2022-08-06 20:02:37,518 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: stop_status
+2022-08-06 20:02:37,834 DEBUG   SenderThread:10172 [sender.py:send():302] send: exit
+2022-08-06 20:02:37,834 INFO    SenderThread:10172 [sender.py:send_exit():438] handling exit code: 1
+2022-08-06 20:02:37,835 INFO    SenderThread:10172 [sender.py:send_exit():440] handling runtime: 16
+2022-08-06 20:02:37,837 INFO    SenderThread:10172 [sender.py:_save_file():1156] saving file wandb-summary.json with policy end
+2022-08-06 20:02:37,838 INFO    SenderThread:10172 [sender.py:send_exit():446] send defer
+2022-08-06 20:02:37,839 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:37,840 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 0
+2022-08-06 20:02:37,840 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:37,841 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 0
+2022-08-06 20:02:37,841 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 1
+2022-08-06 20:02:37,841 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:37,842 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 1
+2022-08-06 20:02:37,938 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:37,938 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:37,938 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 1
+2022-08-06 20:02:37,938 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 2
+2022-08-06 20:02:37,939 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:37,939 DEBUG   SenderThread:10172 [sender.py:send():302] send: stats
+2022-08-06 20:02:37,939 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:37,940 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 2
+2022-08-06 20:02:37,940 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:37,940 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 2
+2022-08-06 20:02:37,940 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 3
+2022-08-06 20:02:37,941 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:37,941 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 3
+2022-08-06 20:02:37,941 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:37,942 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 3
+2022-08-06 20:02:37,942 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 4
+2022-08-06 20:02:37,942 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:37,942 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 4
+2022-08-06 20:02:37,942 DEBUG   SenderThread:10172 [sender.py:send():302] send: summary
+2022-08-06 20:02:37,944 INFO    SenderThread:10172 [sender.py:_save_file():1156] saving file wandb-summary.json with policy end
+2022-08-06 20:02:37,945 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:37,945 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 4
+2022-08-06 20:02:37,945 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 5
+2022-08-06 20:02:37,945 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:37,946 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 5
+2022-08-06 20:02:37,946 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:37,946 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 5
+2022-08-06 20:02:38,056 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:38,212 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 6
+2022-08-06 20:02:38,212 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:38,213 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:38,213 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 6
+2022-08-06 20:02:38,213 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:38,213 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 6
+2022-08-06 20:02:38,326 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:38,375 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_modified():292] file/dir modified: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\wandb-summary.json
+2022-08-06 20:02:38,375 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_modified():292] file/dir modified: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\config.yaml
+2022-08-06 20:02:39,391 INFO    Thread-16 :10172 [dir_watcher.py:_on_file_modified():292] file/dir modified: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\output.log
+2022-08-06 20:02:39,781 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 7
+2022-08-06 20:02:39,782 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:39,783 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:39,783 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 7
+2022-08-06 20:02:39,783 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:39,783 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 7
+2022-08-06 20:02:39,783 INFO    SenderThread:10172 [dir_watcher.py:finish():362] shutting down directory watcher
+2022-08-06 20:02:39,898 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:40,405 INFO    SenderThread:10172 [dir_watcher.py:_on_file_modified():292] file/dir modified: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\output.log
+2022-08-06 20:02:40,406 INFO    SenderThread:10172 [dir_watcher.py:finish():392] scan: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files
+2022-08-06 20:02:40,406 INFO    SenderThread:10172 [dir_watcher.py:finish():406] scan save: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\conda-environment.yaml conda-environment.yaml
+2022-08-06 20:02:40,407 INFO    SenderThread:10172 [dir_watcher.py:finish():406] scan save: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\config.yaml config.yaml
+2022-08-06 20:02:40,407 INFO    SenderThread:10172 [dir_watcher.py:finish():406] scan save: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\output.log output.log
+2022-08-06 20:02:40,410 INFO    SenderThread:10172 [dir_watcher.py:finish():406] scan save: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\requirements.txt requirements.txt
+2022-08-06 20:02:40,413 INFO    SenderThread:10172 [dir_watcher.py:finish():406] scan save: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\wandb-metadata.json wandb-metadata.json
+2022-08-06 20:02:40,414 INFO    SenderThread:10172 [dir_watcher.py:finish():406] scan save: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\wandb-summary.json wandb-summary.json
+2022-08-06 20:02:40,418 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 8
+2022-08-06 20:02:40,419 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:40,423 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:40,423 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 8
+2022-08-06 20:02:40,423 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:40,424 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 8
+2022-08-06 20:02:40,424 INFO    SenderThread:10172 [file_pusher.py:finish():171] shutting down file pusher
+2022-08-06 20:02:40,530 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:40,530 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:40,642 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:40,642 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:40,755 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:40,755 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:40,865 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:40,865 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:40,976 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:40,976 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:41,089 INFO    Thread-23 :10172 [upload_job.py:push():138] Uploaded file C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\config.yaml
+2022-08-06 20:02:41,090 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:41,090 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:41,108 INFO    Thread-24 :10172 [upload_job.py:push():138] Uploaded file C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\output.log
+2022-08-06 20:02:41,118 INFO    Thread-25 :10172 [upload_job.py:push():138] Uploaded file C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\requirements.txt
+2022-08-06 20:02:41,126 INFO    Thread-26 :10172 [upload_job.py:push():138] Uploaded file C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\files\wandb-summary.json
+2022-08-06 20:02:41,200 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:41,200 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:41,311 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:41,312 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:41,342 INFO    Thread-15 :10172 [sender.py:transition_state():459] send defer: 9
+2022-08-06 20:02:41,344 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:41,344 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 9
+2022-08-06 20:02:41,344 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:41,344 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 9
+2022-08-06 20:02:41,453 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:41,879 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 10
+2022-08-06 20:02:41,880 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:41,881 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:41,881 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 10
+2022-08-06 20:02:41,881 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:41,882 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 10
+2022-08-06 20:02:41,882 INFO    SenderThread:10172 [sender.py:transition_state():459] send defer: 11
+2022-08-06 20:02:41,883 DEBUG   SenderThread:10172 [sender.py:send():302] send: final
+2022-08-06 20:02:41,883 DEBUG   SenderThread:10172 [sender.py:send():302] send: footer
+2022-08-06 20:02:41,884 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: defer
+2022-08-06 20:02:41,884 INFO    HandlerThread:10172 [handler.py:handle_request_defer():164] handle defer: 11
+2022-08-06 20:02:41,884 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: defer
+2022-08-06 20:02:41,884 INFO    SenderThread:10172 [sender.py:send_request_defer():455] handle sender defer: 11
+2022-08-06 20:02:41,991 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-06 20:02:41,991 DEBUG   SenderThread:10172 [sender.py:send_request():316] send_request: poll_exit
+2022-08-06 20:02:41,992 INFO    SenderThread:10172 [file_pusher.py:join():176] waiting for file pusher
+2022-08-06 20:02:42,577 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: sampled_history
+2022-08-06 20:02:42,578 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: get_summary
+2022-08-06 20:02:42,579 INFO    MainThread:10172 [wandb_run.py:_footer_history_summary_info():3304] rendering history
+2022-08-06 20:02:42,579 INFO    MainThread:10172 [wandb_run.py:_footer_history_summary_info():3336] rendering summary
+2022-08-06 20:02:42,579 INFO    MainThread:10172 [wandb_run.py:_footer_sync_info():3260] logging synced files
+2022-08-06 20:02:42,583 DEBUG   HandlerThread:10172 [handler.py:handle_request():141] handle_request: shutdown
+2022-08-06 20:02:42,584 INFO    HandlerThread:10172 [handler.py:finish():810] shutting down handler
+2022-08-06 20:02:42,897 INFO    WriterThread:10172 [datastore.py:close():279] close: C:\Users\flori\OneDrive\Desktop\Data Science\Bio-Inspired AI\Project\Bio-AI-project\wandb\run-20220806_200220-zfh60730\run-zfh60730.wandb
+2022-08-06 20:02:43,485 INFO    SenderThread:10172 [sender.py:finish():1312] shutting down sender
+2022-08-06 20:02:43,485 INFO    SenderThread:10172 [file_pusher.py:finish():171] shutting down file pusher
+2022-08-06 20:02:43,485 INFO    SenderThread:10172 [file_pusher.py:join():176] waiting for file pusher
+2022-08-06 20:02:43,597 INFO    MainThread:10172 [internal.py:handle_exit():80] Internal process exited

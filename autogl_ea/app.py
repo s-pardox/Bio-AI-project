@@ -1,14 +1,14 @@
 import torch
 
 from autogl.datasets import build_dataset_from_name
-from autogl.solver import AutoNodeClassifier
+from autogl.solver import AutoNodeClassifier, AutoGraphClassifier
 
 from autogl_ea.settings import search_space as ss
 from autogl_ea.utils import SearchSpaceMng
 from autogl_ea.optimizers import *
 
 
-def launch(alg, dataset='cora', graph_model=None, hidden_layers=1):
+def launch(alg, dataset='cora', graph_model=None, hidden_layers=1, problem='node'):
     if alg == 'GA':
         optimizer = GA()
     elif alg == 'PSO':
@@ -33,52 +33,71 @@ def launch(alg, dataset='cora', graph_model=None, hidden_layers=1):
     ss_mng = SearchSpaceMng(ss.SEARCH_SPACE)
     search_space = ss_mng.modify_ss_by_hl(hidden_layers)
 
-    __solve(optimizer, dataset, graph_model, search_space, device)
+    __solve(optimizer, dataset, graph_model, search_space, device, problem)
 
 
-def __solve(optimizer, dataset, graph_model, search_space, device):
+def __solve(optimizer, dataset, graph_model, search_space, device, problem):
     # Take a look to autogl/solver/base.py and, in particular, to node_classifier.py, in the same folder (the file
     # contains the AutoNodeClassifier class, that technically is labeled as 'solver').
-    solver = AutoNodeClassifier(
 
-        # The (name of) the trainer used in this solver. Default to ``NodeClassificationFull``.
-        # Take a look to autogl/module/train/node_classification_full.py
-        default_trainer='NodeClassificationFull',
+    if problem == 'node':
 
-        # We can bypass it, for the moment.
-        # feature_module = 'deepgl',
+        solver = AutoNodeClassifier(
 
-        # graph_models = ['gcn', 'gat'],
-        graph_models=graph_model,
+            # The (name of) the trainer used in this solver. Default to ``NodeClassificationFull``.
+            # Take a look to autogl/module/train/node_classification_full.py
+            default_trainer='NodeClassificationFull',
 
-        # Let's use our own HPO module :-)
-        hpo_module=optimizer,
+            # We can bypass it, for the moment.
+            # feature_module = 'deepgl',
 
-        # We can bypass it, for the moment.
-        # ensemble_module = 'voting',
+            # graph_models = ['gcn', 'gat'],
+            graph_models=graph_model,
 
-        #
-        device=device,
-        #
-        max_evals=5,
+            # Let's use our own HPO module :-)
+            hpo_module=optimizer,
 
-        # https://autogl.readthedocs.io/en/latest/docfile/tutorial/t_hpo.html#search-space
-        # The following trainer's parameters (valued as the ones defined in Bu et al.'s paper) are passed to
-        # AutoNodeClassifier (node_classifier.py), overwriting the default ones.
-        trainer_hp_space=search_space['trainer_hp_space'],
+            # We can bypass it, for the moment.
+            # ensemble_module = 'voting',
 
-        # The following trainer's parameters (valued as the ones defined in Bu et al.'s paper) are passed to
-        # the GCN model (autogl/module/model/encoders/_dgl/_gcn.py), passing through the AutoNodeClassifier
-        # (node_classifier.py) solver, overwriting the default ones.
-        model_hp_spaces=search_space['model_hp_space']
-    )
+            #
+            device=device,
+            #
+            max_evals=5,
+
+            # https://autogl.readthedocs.io/en/latest/docfile/tutorial/t_hpo.html#search-space
+            # The following trainer's parameters (valued as the ones defined in Bu et al.'s paper) are passed to
+            # AutoNodeClassifier (node_classifier.py), overwriting the default ones.
+            trainer_hp_space=search_space['trainer_hp_space'],
+
+            # The following trainer's parameters (valued as the ones defined in Bu et al.'s paper) are passed to
+            # the GCN model (autogl/module/model/encoders/_dgl/_gcn.py), passing through the AutoNodeClassifier
+            # (node_classifier.py) solver, overwriting the default ones.
+            model_hp_spaces=search_space['model_hp_space']
+        )
+
+        solver.fit(dataset, time_limit=120)
+
+    elif problem == 'graph':
+
+        solver = AutoGraphClassifier(
+            default_trainer='GraphClassificationFull',
+            graph_models=graph_model,
+            hpo_module=optimizer,
+            device=device,
+            max_evals=5,
+            trainer_hp_space=ss.SEARCH_SPACE['trainer_hp_space'],
+            model_hp_spaces=ss.SEARCH_SPACE['model_hp_space']
+        )
+
+        solver.fit(dataset, time_limit=120, train_split=0.8, val_split=0.2)
+
 
     # As default behavior, splits 0.2 of total nodes/graphs for train and 0.4 of nodes/graphs for validation,
     # the rest 0.4 is left for test.
     #
     # time_limit: int
     # The time limit of the whole fit process (in seconds). If set below 0, will ignore time limit. Default ``-1``.
-    solver.fit(dataset, time_limit=120)
 
     """
     # get current leaderboard of the solver

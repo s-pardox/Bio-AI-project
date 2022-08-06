@@ -1,0 +1,28 @@
+  NumNodes: 2708
+  NumEdges: 10556
+  NumFeats: 1433
+  NumClasses: 7
+  NumTrainingSamples: 140
+  NumValidationSamples: 500
+  NumTestSamples: 1000
+Done loading data from cached files.
+[2022-08-06 20:01:20] INFO (NodeClassifier/MainThread) Use the default train/val/test ratio in given dataset
+Running GA...
+Generation Evaluation      Worst       Best     Median    Average    Std Dev
+---------- ---------- ---------- ---------- ---------- ---------- ----------
+         0          5      0.754        0.8       0.78     0.7784 0.01675231
+[1.618578309800005, -3.5129300071174976, -7.396697111456071, 0.4911782923420509, 0, 125.92475743142133, 22.32055118433945] : 0.754
+[2.339084302119271, -4.559346179266124, -7.440035788248293, 0.3559441910650263, 0, 139.65616995910122, 22.054382242750087] : 0.766
+[2.346524802796031, -4.257907074121776, -7.346033241836866, 0.6143433934123217, 3, 292.9784383634633, 27.503824608143017] : 0.8
+[1.8781244622273756, -3.611890420741331, -7.251030031987764, 0.5182145515789442, 0, 251.81473470328888, 14.532890663556268] : 0.78
+[2.2200397178771794, -3.678382968506793, -8.063962934924705, 0.7040789482412413, 3, 130.85716926140356, 13.205147426192438] : 0.792
+Best training fitness =  0.8
+DONE.
+[2022-08-06 20:01:35] INFO (NodeClassifier/MainThread) Ensemble argument on, will try using ensemble model.
+Test accuracy: 0.8080
+best_para =
+[2.346524802796031, -4.257907074121776, -7.346033241836866, 0.6143433934123217, 3, 292.9784383634633, 27.503824608143017]
+C:\Users\flori\anaconda3\envs\bio_venv\lib\site-packages\autogl\solver\utils.py:90: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  self.perform_dict = self.perform_dict.append(new, ignore_index=True)
+C:\Users\flori\anaconda3\envs\bio_venv\lib\site-packages\autogl\solver\utils.py:90: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  self.perform_dict = self.perform_dict.append(new, ignore_index=True)
