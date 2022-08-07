@@ -29,7 +29,7 @@ def main():
     parser = argparse.ArgumentParser(description='AutoGL-EA')
     parser.add_argument('-alg', type=str, default='GA', help='Options: GA, PSO, DE, ES, CMA-ES; default=GA')
     parser.add_argument('-dataset', type=str, default='cora', help='Options: cora, ..; default=cora')
-    parser.add_argument('-graph_model', type=str, default='gcn', help='Options: gcn, ..; default=gcn')
+    parser.add_argument('-graph_model', type=str, default='gcn', help='Options: gcn, gat; default=gcn')
     parser.add_argument('-hl', type=int, default=1, help='The number of hidden layers to be used; default=1')
     parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph; default=node')
 

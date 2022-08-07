@@ -195,16 +195,14 @@ class HPOptimizer(BaseHPOptimizer):
         # Re-runs the model with the best parameters.
         perf, best_trainer = self.fit(best_individual)
 
-        # We need, also, to set these instance variables to let the Solver access them.
+        # We need, also, to set these instance variables to let the Solver (and app.py) access them.
         self.best_trainer = best_trainer
         self.best_para = best_individual
-
-
 
         for ind in final_pop:
             print(str(ind))
 
-        print('Best training fitness = ', best_fitness)
+        print('\nBest training accuracy: {:.4f}'.format(best_fitness))
         print('\n\n\nDONE.\n\n\n')
 
         return best_trainer, best_individual

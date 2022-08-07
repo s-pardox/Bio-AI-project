@@ -105,18 +105,13 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
 
     acc = solver.evaluate(metric='acc')
 
-    best_individual = solver.hpo_module.best_para
-
     print('\nTest accuracy: {:.4f}'.format(acc))
-    print('\nRaw evolved best individual:\n{}'.format(best_individual))
+
+    best_individual = solver.hpo_module.best_para
+    print('\nBest individual (encoded):\n{}'.format(best_individual))
 
     named_individual = solver.hpo_module.gen_named_individual(best_individual)
-    print('\nRaw evolved named individual:\n{}'.format(named_individual))
+    print('\nBest named individual (encoded):\n{}'.format(named_individual))
 
-    para_for_trainer, para_for_hpo = solver.hpo_module._decode_para(named_individual)
-    print('\nAutoGL decoded parameters for trainer:\n{}'.format(para_for_trainer))
-    print('\nAutoGL decoded parameters for HPO:\n{}'.format(para_for_hpo))
-
-    rearranged_params = solver.hpo_module.rearrange_params(para_for_trainer)
-    print('\nRearranged parameters (as requested by the AutoGL optimizer):\n{}'.format(rearranged_params))
-
+    print('\nAutoGL best parameters for trainer (decoded):\n{}'.format(optimizer.best_trainer.hyper_parameters))
+    print('\nAutoGL best parameters for model (decoded):\n{}'.format(optimizer.best_trainer.model.hyper_parameters))
