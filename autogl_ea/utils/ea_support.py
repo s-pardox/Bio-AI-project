@@ -1,3 +1,7 @@
+import wandb
+import inspyred
+
+
 class EASupport:
 
     def __init__(self, search_space, design_variables):
@@ -67,3 +71,52 @@ class EASupport:
                     break
 
         return individual
+
+    def observer(self, population, num_generations, num_evaluations, args):
+        """This method (and the initial comments) has been taken from inspyred.ec.observers.py module.
+        We just add the WandB logging at the end.
+
+        Print the statistics of the evolutionary computation to the screen.
+
+        This function displays the statistics of the evolutionary computation
+        to the screen. The output includes the generation number, the current
+        number of evaluations, the maximum fitness, the minimum fitness,
+        the average fitness, and the standard deviation.
+
+        .. note::
+
+           This function makes use of the ``inspyred.ec.analysis.fitness_statistics``
+           function, so it is subject to the same requirements.
+
+        .. Arguments:
+           population -- the population of Individuals
+           num_generations -- the number of elapsed generations
+           num_evaluations -- the number of candidate solution evaluations
+           args -- a dictionary of keyword arguments
+
+        """
+        stats = inspyred.ec.analysis.fitness_statistics(population)
+        worst_fit = '{0:>10}'.format(stats['worst'])[:10]
+        best_fit = '{0:>10}'.format(stats['best'])[:10]
+        avg_fit = '{0:>10}'.format(stats['mean'])[:10]
+        med_fit = '{0:>10}'.format(stats['median'])[:10]
+        std_fit = '{0:>10}'.format(stats['std'])[:10]
+
+        print('Generation Evaluation      Worst       Best     Median    Average    Std Dev')
+        print('---------- ---------- ---------- ---------- ---------- ---------- ----------')
+        print('{0:>10} {1:>10} {2:>10} {3:>10} {4:>10} {5:>10} {6:>10}\n'.format(num_generations,
+                                                                                 num_evaluations,
+                                                                                 worst_fit,
+                                                                                 best_fit,
+                                                                                 med_fit,
+                                                                                 avg_fit,
+                                                                                 std_fit))
+
+        # Logs the statistics on WandB.
+        wandb.log({
+            'worst_fit': float(worst_fit),
+            'best_fit': float(best_fit),
+            'med_fit': float(med_fit),
+            'avg_fit': float(avg_fit),
+            'std_fit': float(std_fit)
+        })

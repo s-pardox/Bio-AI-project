@@ -36,12 +36,13 @@ class GA(HPOptimizer):
 
         ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population
+        ga.observer = ea_support.observer
 
         final_pop = ga.evolve(evaluator=self.evaluate_candidates,
                               #
                               generator=pop_generator,
                               # Number of generations = max_evaluations / pop_size.
-                              max_evaluations=2,
+                              max_evaluations=25,
                               #
                               num_elites=5,
                               # Population size.
