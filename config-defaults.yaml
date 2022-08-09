@@ -1,0 +1,6 @@
+crossover_rate:
+  value: 0.7
+mutation_rate:
+  value: 0.4
+pop_size:
+  value: 10

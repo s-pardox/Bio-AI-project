@@ -1,4 +1,5 @@
 import random
+import yaml
 
 import inspyred
 import time
@@ -38,16 +39,32 @@ class GA(HPOptimizer):
         pop_generator = ea_support.generate_initial_population
         ga.observer = ea_support.observer
 
+        config = self.getConfig()
+
         final_pop = ga.evolve(evaluator=self.evaluate_candidates,
                               #
                               generator=pop_generator,
                               # Number of generations = max_evaluations / pop_size.
-                              max_evaluations=25,
+                              max_evaluations=100,
                               #
-                              num_elites=5,
+                              num_elites=0,
                               # Population size.
-                              pop_size=5,
+                              pop_size=config['pop_size']['value'],
                               # Number of individuals that have to be generated as initial population.
-                              num_inputs=2)
+                              num_inputs=2,
+                              crossover_rate=config['crossover_rate']['value'],
+                              mutation_rate=config['mutation_rate']['value'])
 
         return self.post_Inspyred_optimization(final_pop)
+
+    def getConfig(self):
+        """This method gets the hyperparameters of the EA from the yaml file
+        """
+
+        config = dict()
+
+        with open(r'config-defaults.yaml') as file:
+            params = yaml.load(file, Loader=yaml.FullLoader)
+            config = params.copy()
+
+        return config

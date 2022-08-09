@@ -1,0 +1,46 @@
+---
+title: "GA - mutation_rates comparison"
+author: "Mattia Florio"
+date: "2022-08-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(9)
+```
+
+
+```{r csv import}
+library(tidyverse)
+library(janitor)
+library(ggplot2)
+library(dplyr)
+library(hrbrthemes)
+
+df_ga_mr_orginal <- read_csv("wandb_ga_mr_trial1.csv")
+
+str(df_ga_mr_orginal)
+```
+
+
+```{r data cleaning}
+df_ga_mr_subset <- df_ga_mr_orginal %>% select(Name, avg_fit, mutation_rate)
+
+#View(df_ga_mr_subset)
+
+```
+
+```{r data analysis}
+
+df_ga_mr_subset %>%
+  ggplot(aes(mutation_rate, avg_fit)) +
+  geom_line(color="grey") +
+  geom_point(shape=21, color="black", fill="#69b3a2", size=6) +
+  labs(x = "Mutation Rate", y = "Average Fit in the final population", title = "GA - Mutation Rates Comparison",
+       subtitle = "Number of Generations = 10, Population Size = 10, Crossover Rate = 0.7")
+
+```
+
+
