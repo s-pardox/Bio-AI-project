@@ -62,10 +62,10 @@ def main():
     wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group='GA - muation_rate comparison')
 
     # Command line launcher.
-    #app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
+    app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
 
     # Manual launcher.
-    app.launch(alg='GA', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
+    #app.launch(alg='GA', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
 
 
 if __name__ == '__main__':

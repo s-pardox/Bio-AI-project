@@ -1,6 +1,6 @@
 crossover_rate:
   value: 0.7
 mutation_rate:
-  value: 0.4
+  value: 0.15
 pop_size:
   value: 10

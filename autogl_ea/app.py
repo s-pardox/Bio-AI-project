@@ -107,7 +107,7 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
     acc = solver.evaluate(metric='acc')
 
     print('\nTest accuracy: {:.4f}'.format(acc))
-    #wandb.log({'Test_Acc:': float(acc)})
+    wandb.log({'Test_Acc:': float(acc)})
 
     best_individual = solver.hpo_module.best_para
     print('\nBest individual (encoded):\n{}'.format(best_individual))
