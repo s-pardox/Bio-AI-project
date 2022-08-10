@@ -45,7 +45,7 @@ class GA(HPOptimizer):
                               #
                               generator=pop_generator,
                               # Number of generations = max_evaluations / pop_size.
-                              max_evaluations=100,
+                              max_evaluations=10,
                               #
                               num_elites=0,
                               # Population size.

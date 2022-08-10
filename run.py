@@ -59,7 +59,7 @@ def main():
 
     # You need to edit settings/wandb_settings.py, specifying WANDB_ENTITY (username), WANDB_API_KEY, etc.
     wandb_run_name = 'alg: {}, ds: {}, gm: {}, hl: {}, problem: {}'.format(alg, dataset, graph_model, hl, problem)
-    wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group='GA - muation_rate comparison')
+    wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group='Initial Test')
 
     # Command line launcher.
     app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
