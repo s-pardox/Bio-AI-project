@@ -1,0 +1,14 @@
+"""
+Fill the parameters and rename this file into wandb_settings.py
+"""
+import os
+
+# WandB username
+os.environ['WANDB_ENTITY'] = ''
+# WandB API key
+os.environ['WANDB_API_KEY'] = ''
+# WandB project name
+os.environ['WANDB_PROJECT'] = ''
+# Local folder in which to store WandB generated contents
+# Leave commented to use the default path '/wandb'
+# os.environ['WANDB_DIR'] = 'os.getcwd() + '/wandb'
