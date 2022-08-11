@@ -1,5 +1,4 @@
 import random
-import yaml
 
 import inspyred
 import time
@@ -40,7 +39,7 @@ class DE(HPOptimizer):
         ssb = SearchSpaceBounder(self.current_space)
         ea.observer = ea_support.observer
 
-        config = self.getConfig()
+        config = self.get_config()
 
         final_pop = ea.evolve(generator=pop_generator,
                               #
@@ -56,16 +55,3 @@ class DE(HPOptimizer):
 
         return self.post_Inspyred_optimization(final_pop)
 
-
-    def getConfig(self):
-
-        """This method gets the hyperparameters of the EA from the yaml file
-        """
-
-        config = dict()
-
-        with open(r'config-defaults.yaml') as file:
-            params = yaml.load(file, Loader=yaml.FullLoader)
-            config = params.copy()
-
-        return config

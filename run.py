@@ -21,6 +21,7 @@ AVAILABLE_ALG = {
     'CMA-ES': 'Covariance Matrix Adaptation - Evolution Strategy'
 }
 
+
 def main():
     """
     Command line arguments parser, WanDB initializer, launcher.
@@ -28,7 +29,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='AutoGL-EA')
     parser.add_argument('-alg', type=str, default='GA', help='Options: GA, PSO, DE, ES, CMA-ES; default=GA')
-    parser.add_argument('-dataset', type=str, default='cora', help='Options: cora, ..; default=cora')
+    parser.add_argument('-dataset', type=str, default='cora', help='Options: cora, proteins; default=cora')
     parser.add_argument('-graph_model', type=str, default='gcn', help='Options: gcn, gat; default=gcn')
     parser.add_argument('-hl', type=int, default=1, help='The number of hidden layers to be used; default=1')
     parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph; default=node')
@@ -45,8 +46,8 @@ def main():
         os.environ['WANDB_MODE'] = 'online'
 
     assert args.alg in AVAILABLE_ALG.keys(), 'Bio-AI algorithm not found.'
-    assert args.dataset in ['cora'], 'Dataset not found.'
-    assert args.graph_model in ['gcn'], 'Graph model not found.'
+    assert args.dataset in ['cora', 'proteins'], 'Dataset not found.'
+    assert args.graph_model in ['gcn', 'gat'], 'Graph model not found.'
     assert 10 >= args.hl >= 1, 'Invalid number of hidden layers.'
     assert args.problem in ['node', 'graph'], 'Kind of problem not found.'
 
@@ -65,7 +66,7 @@ def main():
     app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
 
     # Manual launcher.
-    #app.launch(alg='GA', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
+    # app.launch(alg='GA', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
 
 
 if __name__ == '__main__':

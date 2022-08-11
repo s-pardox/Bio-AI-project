@@ -80,7 +80,8 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
 
         solver = AutoGraphClassifier(
             default_trainer='GraphClassificationFull',
-            graph_models=graph_model,
+            # graph_models=graph_model,
+            graph_models=['gin'],
             hpo_module=optimizer,
             device=device,
             max_evals=5,

@@ -1,8 +1,11 @@
+import yaml
+
 # autogl/module/hpo/base.py
 from autogl.module.hpo.base import BaseHPOptimizer
 
 import autogl_ea.settings.search_space as ss
 from autogl_ea.utils.search_space import SearchSpaceMng
+from autogl_ea.settings import config as cfg
 
 
 class HPOptimizer(BaseHPOptimizer):
@@ -24,6 +27,18 @@ class HPOptimizer(BaseHPOptimizer):
 
         # TODO.
         self.maximize = False
+
+    def get_config(self):
+        """This method gets the hyperparameters of the EA from the yaml file
+        """
+
+        config = dict()
+
+        with open(cfg.EA_HPS_PATH, 'r') as file:
+            params = yaml.load(file, Loader=yaml.FullLoader)
+            config = params.copy()
+
+        return config
 
     def rearrange_params(self, para):
         """Copied and pasted from node_classifier.py:
