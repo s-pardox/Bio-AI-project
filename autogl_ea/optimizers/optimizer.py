@@ -5,6 +5,7 @@ from autogl.module.hpo.base import BaseHPOptimizer
 
 import autogl_ea.settings.search_space as ss
 from autogl_ea.utils.search_space import SearchSpaceMng
+from autogl_ea.utils import EASupport
 from autogl_ea.settings import config as cfg
 
 
@@ -22,11 +23,13 @@ class HPOptimizer(BaseHPOptimizer):
         self.current_space = None
         self.design_variables = None
 
+        # Do we need to invert the optimization logic? (Are we looking for minimum or maximum?)
+        self.maximize = False
+
+        # Calculated in post_Inspyred_optimization method, after the evolutionary process ending.
         self.best_trainer = None
         self.best_para = None
-
-        # TODO.
-        self.maximize = False
+        self.diversity = None
 
     def get_config(self):
         """This method gets the hyperparameters of the EA from the yaml file
@@ -210,9 +213,11 @@ class HPOptimizer(BaseHPOptimizer):
         # Re-runs the model with the best parameters.
         perf, best_trainer = self.fit(best_individual)
 
-        # We need, also, to set these instance variables to let the Solver (and app.py) access them.
+        # We need, also, to set these instance variables to let the Solver (and app.py, trough solver.hpo_model) access
+        # them.
         self.best_trainer = best_trainer
         self.best_para = best_individual
+        self.diversity = EASupport().get_diversity(final_pop)
 
         for ind in final_pop:
             print(str(ind))

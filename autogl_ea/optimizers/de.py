@@ -54,4 +54,3 @@ class DE(HPOptimizer):
                               mutation_rate=config['mutation_rate']['value'])
 
         return self.post_Inspyred_optimization(final_pop)
-

@@ -118,3 +118,5 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
 
     print('\nAutoGL best parameters for trainer (decoded):\n{}'.format(optimizer.best_trainer.hyper_parameters))
     print('\nAutoGL best parameters for model (decoded):\n{}'.format(optimizer.best_trainer.model.hyper_parameters))
+
+    print('\nFinal population diversity:\n{}'.format(solver.hpo_module.diversity))

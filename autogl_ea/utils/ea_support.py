@@ -1,10 +1,13 @@
 import wandb
 import inspyred
+import itertools
+import math
 
 
 class EASupport:
 
-    def __init__(self, search_space, design_variables):
+    def __init__(self, search_space=None, design_variables=None):
+        # These instances variables are only used by generate_initial_population method.
         self.search_space = search_space
         self.design_variables = design_variables
 
@@ -120,3 +123,19 @@ class EASupport:
             'avg_fit': float(avg_fit),
             'std_fit': float(std_fit)
         })
+
+    def get_diversity(self, population):
+        """This method has been inspyred by inspyred.ec.terminators.py module.
+        It calculates the Euclidean distance between every pair of individuals in the population and returns some
+        basic statistics.
+        """
+        cart_prod = itertools.product(population, population)
+        distance = []
+        for (p, q) in cart_prod:
+            d = 0
+            for x, y in zip(p.candidate, q.candidate):
+                d += (x - y) ** 2
+            distance.append(math.sqrt(d))
+
+        avg = sum(distance) / len(distance)
+        return {'max': max(distance), 'min': min(distance), 'avg': avg}
