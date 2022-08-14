@@ -1,5 +1,6 @@
 import argparse
 import yaml
+from autogl_ea.settings import config as cfg
 
 """
 This module must be called before the actual run of the AutoGL-EA algorithm. It sets the hyperparameters of the evolutionary
@@ -29,14 +30,14 @@ def main():
 
     args = parser.parse_args()
 
-    with open('config-defaults.yaml') as yml_file:
+    with open(cfg.EA_HP_PATH) as yml_file:
         data = yaml.safe_load(yml_file)
 
     insert_data_rec(data, search_key='crossover_rate', data={'value': args.cr_rate})
     insert_data_rec(data, search_key='mutation_rate', data={'value': args.mu_rate})
     insert_data_rec(data, search_key='pop_size', data={'value': args.pop_size})
 
-    with open('config-defaults.yaml', 'w') as yml_file:
+    with open(cfg.EA_HP_PATH, 'w') as yml_file:
         yaml.safe_dump(data, yml_file)
 
 

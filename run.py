@@ -34,8 +34,7 @@ def main():
     parser.add_argument('-hl', type=int, default=1, help='The number of hidden layers to be used; default=1')
     parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph; default=node')
 
-    parser.add_argument('-wandb', type=bool, default=False, help='Log results on WandB: default=False')
-
+    parser.add_argument('-wandb', type=bool, default=True, help='Log results on WandB: default=False')
     args = parser.parse_args()
 
     if args.wandb == 'False':
@@ -60,7 +59,8 @@ def main():
 
     # You need to edit settings/wandb_settings.py, specifying WANDB_ENTITY (username), WANDB_API_KEY, etc.
     wandb_run_name = 'alg: {}, ds: {}, gm: {}, hl: {}, problem: {}'.format(alg, dataset, graph_model, hl, problem)
-    wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group='Initial Test')
+    # YAML config file.
+    wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group='Initial Tests')
 
     # Command line launcher.
     app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)

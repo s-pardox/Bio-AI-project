@@ -37,7 +37,7 @@ class HPOptimizer(BaseHPOptimizer):
 
         config = dict()
 
-        with open(cfg.EA_HPS_PATH, 'r') as file:
+        with open(cfg.EA_HP_PATH, 'r') as file:
             params = yaml.load(file, Loader=yaml.FullLoader)
             config = params.copy()
 
