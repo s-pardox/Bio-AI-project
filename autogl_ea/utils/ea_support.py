@@ -2,6 +2,7 @@ import wandb
 import inspyred
 import itertools
 import math
+import statistics
 
 
 class EASupport:
@@ -115,13 +116,21 @@ class EASupport:
                                                                                  avg_fit,
                                                                                  std_fit))
 
+        diversity = self.get_diversity(population)
+
         # Logs the statistics on WandB.
         wandb.log({
             'worst_fit': float(worst_fit),
             'best_fit': float(best_fit),
             'med_fit': float(med_fit),
             'avg_fit': float(avg_fit),
-            'std_fit': float(std_fit)
+            'std_fit': float(std_fit),
+
+            'min_div': diversity['min'],
+            'max_div': diversity['max'],
+            'med_div': diversity['med'],
+            'avg_div': diversity['avg'],
+            'std_div': diversity['std']
         })
 
     def get_diversity(self, population):
@@ -137,5 +146,8 @@ class EASupport:
                 d += (x - y) ** 2
             distance.append(math.sqrt(d))
 
-        avg = sum(distance) / len(distance)
-        return {'max': max(distance), 'min': min(distance), 'avg': avg}
+        # Removes all those values result of self comparisons.
+        distance = list(filter(lambda a: a != 0.0, distance))
+
+        return {'min': min(distance), 'max': max(distance), 'med': statistics.median(distance),
+                'avg': statistics.mean(distance), 'std': statistics.stdev(distance)}
