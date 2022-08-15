@@ -17,7 +17,8 @@ AVAILABLE_ALG = {
     'GA': 'Genetic Algorithm',
     'PSO': 'Particle Swarm Optimization',
     'DE': 'Differential Evolution',
-    'ES': 'Evolution Strategy',
+    'ES_plus': '(μ + λ) Evolution Strategy',
+    'ES_comma': '(μ, λ) Evolution Strategy',
     'CMA-ES': 'Covariance Matrix Adaptation - Evolution Strategy'
 }
 
@@ -28,7 +29,8 @@ def main():
     """
 
     parser = argparse.ArgumentParser(description='AutoGL-EA')
-    parser.add_argument('-alg', type=str, default='GA', help='Options: GA, PSO, DE, ES, CMA-ES; default=GA')
+    parser.add_argument('-alg', type=str, default='ES_comma',
+                        help='Options: GA, PSO, DE, ES_plus, ES_comma, CMA-ES; default=GA')
     parser.add_argument('-dataset', type=str, default='cora', help='Options: cora, proteins; default=cora')
     parser.add_argument('-graph_model', type=str, default='gcn', help='Options: gcn, gat; default=gcn')
     parser.add_argument('-hl', type=int, default=1, help='The number of hidden layers to be used; default=1')
@@ -66,7 +68,7 @@ def main():
     app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
 
     # Manual launcher.
-    # app.launch(alg='GA', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
+    # app.launch(alg='ES_comma', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
 
 
 if __name__ == '__main__':

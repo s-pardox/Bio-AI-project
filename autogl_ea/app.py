@@ -16,8 +16,12 @@ def launch(alg='GA', dataset='cora', graph_model=None, hidden_layers=1, problem=
         optimizer = PSO()
     elif alg == 'DE':
         optimizer = DE()
-    elif alg == 'ES':
+    elif alg == 'ES_plus':
         optimizer = ES()
+        optimizer.set_strategy('plus')
+    elif alg == 'ES_comma':
+        optimizer = ES()
+        optimizer.set_strategy('comma')
     elif alg == 'CMA-ES':
         optimizer = CMA_ES()
 
