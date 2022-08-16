@@ -93,7 +93,10 @@ class HPOptimizer(BaseHPOptimizer):
         to reassign a key to each one, before to evaluate it with the trainer.
         """
         named_individual = {}
-        for i in range(0, len(individual)):
+        # Starting from the 2nd generation of comma/plus ES, to every individual are added the mutations rates. So,
+        # we cannot directly use the individual length: in those cases is exactly doubled.
+        # for i in range(0, len(individual)):
+        for i in range(0, len(self.design_variables)):
             if self.design_variables[i] == 'act_':
                 # TODO.
                 # Reverts the value from float to str, as needed by _decode_para method.

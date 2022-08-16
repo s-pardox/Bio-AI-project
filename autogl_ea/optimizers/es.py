@@ -69,7 +69,7 @@ class ES(HPOptimizer):
                               #
                               evaluator=self.evaluate_candidates,
                               # Mu parameter, as defined in Bu et al.'s paper.
-                              pop_size=10,
+                              pop_size=2,
                               #
                               bounder=ssb,
                               #
