@@ -36,7 +36,7 @@ def main():
     parser.add_argument('-hl', type=int, default=1, help='The number of hidden layers to be used; default=1')
     parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph; default=node')
 
-    parser.add_argument('-wandb', type=bool, default=True, help='Log results on WandB: default=False')
+    parser.add_argument('-wandb', type=bool, default=True, help='Log results on WandB; default=False')
     args = parser.parse_args()
 
     if args.wandb == 'False':

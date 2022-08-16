@@ -43,7 +43,7 @@ class EASupport:
         size = args.get('num_inputs', 10)
 
         # For each individual, due to the fact we cannot keep a key-value parameter pair, we'd like to
-        # keep the order of parameters at least, as specified in PARAM_KEYS.
+        # keep the order of parameters at least, as specified in DESIGN_VARIABLES.
         individual = []
         for param_key in self.design_variables:
 

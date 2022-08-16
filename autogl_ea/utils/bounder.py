@@ -29,12 +29,12 @@ class SearchSpaceBounder:
         """
         Input parameters:
             candidate: a list that contains, in each position, a value representing a specific gene (the index of each
-                one is exactly the same of the PARAM_KEYS list);
+                one is exactly the same of the DESIGN_VARIABLES list);
             args: dictionary that contains Inspyred's evolutionary parameters (max_generations, num_selected, etc.).
         """
         for para in self.current_space:
             if para['parameterName'] in self.TO_BOUND:
-                i = ss.PARAM_KEYS.index(para['parameterName'])
+                i = ss.DESIGN_VARIABLES.index(para['parameterName'])
 
                 # Because we use _encode_para function before, we should only deal with DOUBLE, INTEGER and DISCRETE
                 if para['type'] == 'DOUBLE' or para['type'] == 'INTEGER':
