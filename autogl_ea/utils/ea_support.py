@@ -138,15 +138,19 @@ class EASupport:
         It calculates the Euclidean distance between every pair of individuals in the population and returns some
         basic statistics.
         """
+        ind_length = len(self.design_variables)
+
         cart_prod = itertools.product(population, population)
         distance = []
         for (p, q) in cart_prod:
             d = 0
-            for x, y in zip(p.candidate, q.candidate):
+            # EAs add at the end of every individual a number of mutation rates equals to the number of genes.
+            # For that reason we've to truncate the list.
+            for x, y in zip(p.candidate[0:ind_length], q.candidate[0:ind_length]):
                 d += (x - y) ** 2
             distance.append(math.sqrt(d))
 
-        # Removes all those values result of self comparisons.
+        # Removes all those values result of self comparisons (matrix diagonal).
         distance = list(filter(lambda a: a != 0.0, distance))
 
         return {'min': min(distance), 'max': max(distance), 'med': statistics.median(distance),

@@ -29,7 +29,7 @@ def main():
     """
 
     parser = argparse.ArgumentParser(description='AutoGL-EA')
-    parser.add_argument('-alg', type=str, default='ES_comma',
+    parser.add_argument('-alg', type=str, default='ES_plus',
                         help='Options: GA, PSO, DE, ES_plus, ES_comma, CMA-ES; default=GA')
     parser.add_argument('-dataset', type=str, default='cora', help='Options: cora, proteins; default=cora')
     parser.add_argument('-graph_model', type=str, default='gcn', help='Options: gcn, gat; default=gcn')

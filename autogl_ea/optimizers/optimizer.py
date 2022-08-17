@@ -220,7 +220,9 @@ class HPOptimizer(BaseHPOptimizer):
         # them.
         self.best_trainer = best_trainer
         self.best_para = best_individual
-        self.diversity = EASupport().get_diversity(final_pop)
+        # Diversity.
+        ea_support = EASupport(self.current_space, self.design_variables)
+        self.diversity = ea_support.get_diversity(final_pop)
 
         for ind in final_pop:
             print(str(ind))
