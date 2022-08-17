@@ -32,7 +32,7 @@ class DE(HPOptimizer):
 
         ea = inspyred.ec.DEA(rand)
         ea.observer = inspyred.ec.observers.stats_observer
-        ea.terminator = inspyred.ec.terminators.evaluation_termination
+        ea.terminator = inspyred.ec.terminators.generation_termination
 
         ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population
@@ -49,7 +49,7 @@ class DE(HPOptimizer):
                               # Search Space bounder.
                               bounder=ssb,
                               #
-                              max_generations=100,
+                              max_generations=config['max_gen']['value'],
                               crossover_rate=config['crossover_rate']['value'],
                               mutation_rate=config['mutation_rate']['value'])
 

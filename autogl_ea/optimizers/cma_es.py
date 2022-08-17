@@ -30,17 +30,19 @@ class CMA_ES(HPOptimizer):
         rand = random.Random()
         rand.seed(int(time.time()))
 
+        config = self.get_config()
+
         # CMA-ES parameters.
         sigma = 0.5
         # λ: indicates the number of offspring produced.
         num_offspring = 100
         # μ: population size.
-        pop_size = 20
+        pop_size = config['pop_size']['value']
         """!!! Very important constraint: λ >= μ !!!"""
 
         # Number of individuals that have to be generated as initial population.
         num_inputs = 20
-        max_generations = 2
+        max_generations = config['max_gen']['value']
 
         ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population(rand, {'num_inputs': num_inputs})

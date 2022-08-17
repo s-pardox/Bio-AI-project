@@ -1,6 +1,16 @@
+cognitive_v:
+  value: null
 crossover_rate:
-  value: 0.9
+  value: null
+inertia_v:
+  value: null
+max_eval:
+  value: null
+max_gen:
+  value: null
 mutation_rate:
-  value: 0.4
+  value: null
 pop_size:
-  value: 10
+  value: null
+social_v:
+  value: null

@@ -57,6 +57,8 @@ class ES(HPOptimizer):
         ea.terminator = [inspyred.ec.terminators.evaluation_termination,
                          inspyred.ec.terminators.diversity_termination]
 
+        ea.observer = inspyred.ec.observers.stats_observer
+
         # Otherwise, it uses the default 'plus' replacer.
         if self.strategy == 'comma':
             ea.replacer = inspyred.ec.replacers.comma_replacement
@@ -64,15 +66,18 @@ class ES(HPOptimizer):
         ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population
         ssb = SearchSpaceBounder(self.current_space)
+        ea.observer = ea_support.observer
+
+        config = self.get_config()
 
         final_pop = ea.evolve(generator=pop_generator,
                               #
                               evaluator=self.evaluate_candidates,
                               # Mu parameter, as defined in Bu et al.'s paper.
-                              pop_size=4,
+                              pop_size=config['pop_size']['value'],
                               #
                               bounder=ssb,
-                              #
-                              max_generations=2)
+                              #Number of generations = max_evaluations / pop_size
+                              max_evaluations=config['max_eval']['value'])
 
         return self.post_Inspyred_optimization(final_pop)
