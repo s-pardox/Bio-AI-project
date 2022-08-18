@@ -32,35 +32,37 @@ class CMA_ES(HPOptimizer):
 
         config = self.get_config()
 
-        # CMA-ES parameters.
-        sigma = 0.5
-        # λ: indicates the number of offspring produced.
-        num_offspring = 100
-        # μ: population size.
-        pop_size = config['pop_size']['value']
-        """!!! Very important constraint: λ >= μ !!!"""
+        """CMA-ES initialization parameters"""
 
-        # Number of individuals that have to be generated as initial population.
-        num_inputs = 20
-        max_generations = config['max_gen']['value']
+        # Initial standard deviation.
+        sigma = 0.5
+        # Random number seed for 'numpy.random'; 'None' and '0' equate to 'time'.
+        seed = 0
+
+        # Take a look at the default options ('cma_default_options_') in cma/evolution_strategy.py.
+        # We've 'popsize' parameter instead of 'pop_size'.
+        # Population size, AKA lambda, int(popsize) is the number of new solution per iteration (initial population
+        # and/or the number of offspring that will survive at every generation).
+        pop_size = config['pop_size']['value']
+        # CMA_mu: parents selection parameter, default is popsize // 2'
+        # We can use the default parameter.
+        # Very important constraint: λ >= μ. In terms of CMA-ES parameters, the constraint is:
+        # popsize (λ) >= CMA_mu (μ)
+
+        num_gen = config['max_gen']['value']
 
         ea_support = EASupport(self.current_space, self.design_variables)
-        pop_generator = ea_support.generate_initial_population(rand, {'num_inputs': num_inputs})
+        pop_generator = ea_support.generate_initial_population(rand, {'pop_size': pop_size})
         ssb = SearchSpaceBounder(self.current_space)
 
         es = cma.CMAEvolutionStrategy(pop_generator,
                                       sigma,
                                       {
-                                          # Population size, AKA lambda, int(popsize) is the number of new solution
-                                          # per iteration.
-                                          'popsize': num_offspring,
-                                          # Random number seed for 'numpy.random'; 'None' and '0' equate to 'time'.
-                                          'seed': 0,
-                                          # Parents selection parameter, default is popsize // 2, AKA mu.
-                                          'CMA_mu': pop_size
+                                          'popsize': pop_size,
+                                          'seed': seed
                                       })
 
-        for i in range(0, max_generations):
+        for i in range(0, num_gen):
             # Gets list of new solutions (the size of the list is exactly equals to the value of the 'num_offspring'
             # variable). The method returns a list of numpy.ndarray(s), while the evaluate_candidates method expects
             # a simple list.

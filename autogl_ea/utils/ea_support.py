@@ -15,7 +15,7 @@ class EASupport:
     def generate_initial_population(self, random, args):
         """Initializes the initial population.
 
-        This method initializes a single individual belonging to the initial population. It simply randomly
+        This method initializes/generates a single individual belonging to the initial population. It simply randomly
         generate bounded parameters (i.e. a bounded search space), following the rules associated with each of them.
 
         We need both formal parameters (random, args), because the function is invoked as:
@@ -38,9 +38,6 @@ class EASupport:
         For that reason, we have temporary fixed to '1' the number of hidden layers, letting evolve the number of
         hidden units for that single layer (H1).
         """
-
-        # In the case the pop_size parameter wasn't specified in ga.evolve() method.
-        size = args.get('num_inputs', 10)
 
         # For each individual, due to the fact we cannot keep a key-value parameter pair, we'd like to
         # keep the order of parameters at least, as specified in DESIGN_VARIABLES.

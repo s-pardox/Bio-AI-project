@@ -40,16 +40,23 @@ class DE(HPOptimizer):
 
         config = self.get_config()
 
-        final_pop = ea.evolve(generator=pop_generator,
-                              #
-                              evaluator=self.evaluate_candidates,
-                              # Population size.
-                              pop_size=config['pop_size']['value'],
-                              # Search Space bounder.
-                              bounder=ssb,
-                              #
-                              max_generations=config['max_gen']['value'],
-                              crossover_rate=config['crossover_rate']['value'],
-                              mutation_rate=config['mutation_rate']['value'])
+        final_pop = ea.evolve(
+            # Fitness evaluator.
+            evaluator=self.evaluate_candidates,
+            # Initial population generator.
+            generator=pop_generator,
+            # Number of individuals that have to be generated as initial population. This parameter will be passed to
+            # ea_support.generate_initial_population.
+            pop_size=config['pop_size']['value'],
+            # Search Space bounder.
+            bounder=ssb,
+            # The number of generations processed.
+            max_generations=config['max_gen']['value'],
+            #
+            crossover_rate=config['crossover_rate']['value'],
+            mutation_rate=config['mutation_rate']['value']
+        )
 
         return self.post_Inspyred_optimization(final_pop)
+
+

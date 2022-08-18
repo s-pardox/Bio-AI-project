@@ -41,26 +41,25 @@ class PSO(HPOptimizer):
 
         config = self.get_config()
 
-        final_pop = ea.evolve(evaluator=self.evaluate_candidates,
-                              #
-                              generator=pop_generator,
-                              # Population size.
-                              pop_size=config['pop_size']['value'],
-                              #
-                              max_evaluations=config['max_eval']['value'],
-                              #
-                              neighborhood_size=5,
-
-                              # TODO.
-                              # Number of individuals that have to be generated as initial population.
-                              # No: it should be enough the pop_size parameter.
-                              # num_inputs=2,
-
-                              # Search Space bounder.
-                              bounder=ssb,
-                              #
-                              inertia=config['inertia_v']['value'],
-                              cognitive_rate=config['cognitive_v']['value'],
-                              social_rate=config['social_v']['value'])
+        final_pop = ea.evolve(
+            # Fitness evaluator.
+            evaluator=self.evaluate_candidates,
+            # Initial population generator.
+            generator=pop_generator,
+            # Number of individuals that have to be generated as initial population. This parameter will be passed to
+            # ea_support.generate_initial_population.
+            pop_size=config['pop_size']['value'],
+            # Number of generations = max_evaluations / pop_size.
+            max_evaluations=config['max_eval']['value'],
+            # Search Space bounder.
+            bounder=ssb,
+            # Rhe width of the neighborhood around a particle which determines the size of the neighborhood.
+            # (This is a specific attribute of inspyred.swarm.topologies.ring_topology).
+            neighborhood_size=5,
+            #
+            inertia=config['inertia_v']['value'],
+            cognitive_rate=config['cognitive_v']['value'],
+            social_rate=config['social_v']['value']
+        )
 
         return self.post_Inspyred_optimization(final_pop)

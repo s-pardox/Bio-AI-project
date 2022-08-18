@@ -61,21 +61,31 @@ class ES(HPOptimizer):
         if self.strategy == 'comma':
             ea.replacer = inspyred.ec.replacers.comma_replacement
 
+        config = self.get_config()
+
         ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population
         ssb = SearchSpaceBounder(self.current_space)
         ea.observer = ea_support.observer
 
-        config = self.get_config()
+        final_pop = ea.evolve(
+            # Fitness evaluator.
+            evaluator=self.evaluate_candidates,
+            # Initial population generator.
+            generator=pop_generator,
 
-        final_pop = ea.evolve(generator=pop_generator,
-                              #
-                              evaluator=self.evaluate_candidates,
-                              # Mu parameter, as defined in Bu et al.'s paper.
-                              pop_size=config['pop_size']['value'],
-                              #
-                              bounder=ssb,
-                              # Number of generations = max_evaluations / pop_size
-                              max_evaluations=config['max_eval']['value'])
+            # Number of individuals that have to be generated as initial population. This parameter will be passed to
+            # ea_support.generate_initial_population.
+            # TODO.
+            # Mu parameter, as defined in Bu et al.'s paper.
+            # Are we sure? Or we're dealing with the lambda parameter... ?
+            pop_size=config['pop_size']['value'],
+
+            # The number of generations processed.
+            # Number of generations = max_evaluations / pop_size.
+            max_evaluations=config['max_eval']['value'],
+            # Search Space bounder.
+            bounder=ssb
+        )
 
         return self.post_Inspyred_optimization(final_pop)
