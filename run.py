@@ -12,15 +12,7 @@ import wandb
 
 import autogl_ea.app as app
 import autogl_ea.settings.wandb_settings
-
-AVAILABLE_ALG = {
-    'GA': 'Genetic Algorithm',
-    'PSO': 'Particle Swarm Optimization',
-    'DE': 'Differential Evolution',
-    'ES_plus': '(μ + λ) Evolution Strategy',
-    'ES_comma': '(μ, λ) Evolution Strategy',
-    'CMA-ES': 'Covariance Matrix Adaptation - Evolution Strategy'
-}
+import autogl_ea.settings.config as cfg
 
 
 def main():
@@ -46,7 +38,7 @@ def main():
     elif args.wandb == 'True':
         os.environ['WANDB_MODE'] = 'online'
 
-    assert args.alg in AVAILABLE_ALG.keys(), 'Bio-AI algorithm not found.'
+    assert args.alg in cfg.AVAILABLE_ALG.keys(), 'Bio-AI algorithm not found.'
     assert args.dataset in ['cora', 'citeseer'], 'Dataset not found.'
     assert args.graph_model in ['gcn', 'gat'], 'Graph model not found.'
     assert 10 >= args.hl >= 1, 'Invalid number of hidden layers.'
