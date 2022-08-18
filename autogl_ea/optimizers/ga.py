@@ -31,7 +31,6 @@ class GA(HPOptimizer):
         rand.seed(int(time.time()))
 
         ga = inspyred.ec.GA(rand)
-        ga.observer = inspyred.ec.observers.stats_observer
         ga.terminator = inspyred.ec.terminators.evaluation_termination
 
         ea_support = EASupport(self.current_space, self.design_variables)
@@ -47,8 +46,13 @@ class GA(HPOptimizer):
                               max_evaluations=config['max_eval']['value'],
                               # Population size.
                               pop_size=config['pop_size']['value'],
+
+                              # TODO.
                               # Number of individuals that have to be generated as initial population.
-                              num_inputs=2,
+                              # No: it should be enough the pop_size parameter.
+                              # num_inputs=2,
+
+                              #
                               crossover_rate=config['crossover_rate']['value'],
                               mutation_rate=config['mutation_rate']['value'])
 

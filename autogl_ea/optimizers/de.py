@@ -31,7 +31,6 @@ class DE(HPOptimizer):
         rand.seed(int(time.time()))
 
         ea = inspyred.ec.DEA(rand)
-        ea.observer = inspyred.ec.observers.stats_observer
         ea.terminator = inspyred.ec.terminators.generation_termination
 
         ea_support = EASupport(self.current_space, self.design_variables)

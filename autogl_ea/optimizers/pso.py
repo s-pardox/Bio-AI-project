@@ -33,7 +33,6 @@ class PSO(HPOptimizer):
         ea = inspyred.swarm.PSO(rand)
         ea.topology = inspyred.swarm.topologies.ring_topology
         ea.terminator = inspyred.ec.terminators.evaluation_termination
-        ea.observer = inspyred.ec.observers.stats_observer
 
         ea_support = EASupport(self.current_space, self.design_variables)
         pop_generator = ea_support.generate_initial_population
@@ -51,10 +50,15 @@ class PSO(HPOptimizer):
                               max_evaluations=config['max_eval']['value'],
                               #
                               neighborhood_size=5,
+
+                              # TODO.
                               # Number of individuals that have to be generated as initial population.
-                              num_inputs=2,
+                              # No: it should be enough the pop_size parameter.
+                              # num_inputs=2,
+
                               # Search Space bounder.
                               bounder=ssb,
+                              #
                               inertia=config['inertia_v']['value'],
                               cognitive_rate=config['cognitive_v']['value'],
                               social_rate=config['social_v']['value'])

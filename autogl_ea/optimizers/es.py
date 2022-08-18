@@ -57,8 +57,6 @@ class ES(HPOptimizer):
         ea.terminator = [inspyred.ec.terminators.evaluation_termination,
                          inspyred.ec.terminators.diversity_termination]
 
-        ea.observer = inspyred.ec.observers.stats_observer
-
         # Otherwise, it uses the default 'plus' replacer.
         if self.strategy == 'comma':
             ea.replacer = inspyred.ec.replacers.comma_replacement
@@ -77,7 +75,7 @@ class ES(HPOptimizer):
                               pop_size=config['pop_size']['value'],
                               #
                               bounder=ssb,
-                              #Number of generations = max_evaluations / pop_size
+                              # Number of generations = max_evaluations / pop_size
                               max_evaluations=config['max_eval']['value'])
 
         return self.post_Inspyred_optimization(final_pop)
