@@ -52,7 +52,7 @@ class CMA_ES(HPOptimizer):
         num_gen = config['max_gen']['value']
 
         ea_support = EASupport(self.current_space, self.design_variables)
-        pop_generator = ea_support.generate_initial_population(rand, {'pop_size': pop_size})
+        pop_generator = ea_support.generate_initial_population(rand, {})
         ssb = SearchSpaceBounder(self.current_space)
 
         es = cma.CMAEvolutionStrategy(pop_generator,
@@ -81,7 +81,7 @@ class CMA_ES(HPOptimizer):
         # Final population, best unbounded individual, best training fitness.
         final_pop = es.ask()
         best_unbounded_individual = es.best.x
-        best_training_fitness = es.best.x
+        best_training_fitness = es.best.f
 
         # Here, again, we're dealing with a ndarray data type that has to be bounded and converted.
         best_individual = ssb(best_unbounded_individual.tolist(), {})
@@ -97,10 +97,11 @@ class CMA_ES(HPOptimizer):
         self.best_trainer = best_trainer
         self.best_para = best_individual
 
+        print('\nFinal population:\n')
         for ind in final_pop:
             print(str(ind))
 
-        print('Best training fitness = ', best_training_fitness)
+        print('\nBest training accuracy: {:.4f}'.format(best_training_fitness))
         print('\n\n\nDONE.\n\n\n')
 
         return best_trainer, best_individual

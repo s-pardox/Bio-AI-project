@@ -224,6 +224,7 @@ class HPOptimizer(BaseHPOptimizer):
         ea_support = EASupport(self.current_space, self.design_variables)
         self.diversity = ea_support.get_diversity(final_pop)
 
+        print('\nFinal population:\n')
         for ind in final_pop:
             print(str(ind))
 
