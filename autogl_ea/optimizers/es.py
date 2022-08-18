@@ -73,12 +73,9 @@ class ES(HPOptimizer):
             evaluator=self.evaluate_candidates,
             # Initial population generator.
             generator=pop_generator,
-
-            # Number of individuals that have to be generated as initial population. This parameter will be passed to
-            # ea_support.generate_initial_population.
-            # TODO.
-            # Mu parameter, as defined in Bu et al.'s paper.
-            # Are we sure? Or we're dealing with the lambda parameter... ?
+            # Population size, AKA lambda, is the number of new solution per iteration (initial population and/or the
+            # number of offspring that will survive at every generation).
+            # This parameter will be passed to ea_support.generate_initial_population.
             pop_size=config['pop_size']['value'],
 
             # The number of generations processed.
