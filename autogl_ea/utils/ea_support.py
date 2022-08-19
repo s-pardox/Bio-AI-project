@@ -85,7 +85,6 @@ class EASupport:
         the average fitness, and the standard deviation.
 
         .. note::
-
            This function makes use of the ``inspyred.ec.analysis.fitness_statistics``
            function, so it is subject to the same requirements.
 
@@ -94,41 +93,57 @@ class EASupport:
            num_generations -- the number of elapsed generations
            num_evaluations -- the number of candidate solution evaluations
            args -- a dictionary of keyword arguments
-
         """
-        stats = inspyred.ec.analysis.fitness_statistics(population)
-        worst_fit = '{0:>10}'.format(stats['worst'])[:10]
-        best_fit = '{0:>10}'.format(stats['best'])[:10]
-        avg_fit = '{0:>10}'.format(stats['mean'])[:10]
-        med_fit = '{0:>10}'.format(stats['median'])[:10]
-        std_fit = '{0:>10}'.format(stats['std'])[:10]
+        print_diversity_stats = True
 
-        print('Generation Evaluation      Worst       Best     Median    Average    Std Dev')
-        print('---------- ---------- ---------- ---------- ---------- ---------- ----------')
-        print('{0:>10} {1:>10} {2:>10} {3:>10} {4:>10} {5:>10} {6:>10}\n'.format(num_generations,
-                                                                                 num_evaluations,
-                                                                                 worst_fit,
-                                                                                 best_fit,
-                                                                                 med_fit,
-                                                                                 avg_fit,
-                                                                                 std_fit))
+        def print_acc_stats(num_gens, num_evals, stats):
+            print('Accuracy statistics')
+            print('Generation Evaluation      Worst       Best     Median    Average    Std Dev')
+            print('---------- ---------- ---------- ---------- ---------- ---------- ----------')
+            print('{0:>10} {1:>10} {2:>10} {3:>10} {4:>10} {5:>10} {6:>10}\n'.format(num_gens,
+                                                                                     num_evals,
+                                                                                     stats['worst'],
+                                                                                     stats['best'],
+                                                                                     stats['median'],
+                                                                                     stats['mean'],
+                                                                                     stats['std']))
 
-        diversity = self.get_diversity(population)
+        def print_div_stats(num_gens, num_evals, stats):
+            print('Diversity statistics')
+            print('Generation Evaluation        Min        Max     Median    Average    Std Dev')
+            print('---------- ---------- ---------- ---------- ---------- ---------- ----------')
+            print('{0:>10} {1:>10} {2:>10} {3:>10} {4:>10} {5:>10} {6:>10}\n'.format(num_gens,
+                                                                                     num_evals,
+                                                                                     stats['min'],
+                                                                                     stats['max'],
+                                                                                     stats['med'],
+                                                                                     stats['avg'],
+                                                                                     stats['std']))
 
-        # Logs the statistics on WandB.
-        wandb.log({
-            'worst_fit': float(worst_fit),
-            'best_fit': float(best_fit),
-            'med_fit': float(med_fit),
-            'avg_fit': float(avg_fit),
-            'std_fit': float(std_fit),
+        def num_format(stats):
+            for stat in stats:
+                stats[stat] = '{0:>10}'.format(stats[stat])[:10]
+            return stats
 
-            'min_div': diversity['min'],
-            'max_div': diversity['max'],
-            'med_div': diversity['med'],
-            'avg_div': diversity['avg'],
-            'std_div': diversity['std']
-        })
+        # Accuracy and diversity statistics.
+        acc_stats = num_format(inspyred.ec.analysis.fitness_statistics(population))
+        div_stats = num_format(self.get_diversity(population))
+
+        print_acc_stats(num_generations, num_evaluations, acc_stats)
+        if print_diversity_stats:
+            print_div_stats(num_generations, num_evaluations, div_stats)
+
+        # Redefines the key names before the WandB logging.
+        wandb_acc_stats = {}
+        for stat in acc_stats:
+            wandb_acc_stats['{}_fit'.format(stat)] = acc_stats[stat]
+
+        wandb_div_stats = {}
+        for stat in div_stats:
+            wandb_div_stats['{}_div'.format(stat)] = div_stats[stat]
+
+        wandb.log(wandb_acc_stats)
+        wandb.log(wandb_div_stats)
 
     def get_diversity(self, population):
         """This method has been inspyred by inspyred.ec.terminators.py module.
@@ -150,5 +165,10 @@ class EASupport:
         # Removes all those values result of self comparisons (matrix diagonal).
         distance = list(filter(lambda a: a != 0.0, distance))
 
-        return {'min': min(distance), 'max': max(distance), 'med': statistics.median(distance),
+        stats = {'min': min(distance), 'max': max(distance), 'med': statistics.median(distance),
                 'avg': statistics.mean(distance), 'std': statistics.stdev(distance)}
+
+        for stat in stats:
+            stats[stat] = '{0:>10}'.format(stats[stat])[:10]
+
+        return stats

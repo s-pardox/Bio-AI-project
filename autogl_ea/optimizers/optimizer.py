@@ -14,8 +14,6 @@ class HPOptimizer(BaseHPOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.max_evals = kwargs.get('max_evals', 2)
-
         # The following instance variables are going to be set in the optimize method.
         self.trainer = None
         self.dataset = None
@@ -34,7 +32,6 @@ class HPOptimizer(BaseHPOptimizer):
     def get_config(self):
         """This method gets the hyperparameters of the EA from the yaml file
         """
-
         config = dict()
 
         with open(cfg.EA_HP_PATH, 'r') as file:

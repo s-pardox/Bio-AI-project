@@ -7,6 +7,7 @@ from autogl_ea.optimizers import HPOptimizer
 from autogl_ea.utils import EASupport
 from autogl_ea.utils import SearchSpaceBounder
 
+from inspyred.ec.ec import Individual
 
 class CMA_ES(HPOptimizer):
     """Covariance matrix adaptation evolution strategy"""
@@ -62,6 +63,17 @@ class CMA_ES(HPOptimizer):
                                           'seed': seed
                                       })
 
+        def convert_to_inspyred_pop(cma_es_candidates):
+            """In order to be able to use the Inspyred observer method, we have to map the candidates into an Inspyred
+            Individual list of objects."""
+            inspyred_pop = []
+            for j, candidate in enumerate(cma_es_candidates):
+                individual = Individual(candidate=candidate.tolist())
+                individual.fitness = fitnesses[j]
+                inspyred_pop.append(individual)
+            return inspyred_pop
+
+        """Evolutionary algorithm main cycle"""
         for i in range(0, num_gen):
             # Gets list of new solutions (the size of the list is exactly equals to the value of the 'num_offspring'
             # variable). The method returns a list of numpy.ndarray(s), while the evaluate_candidates method expects
@@ -75,6 +87,10 @@ class CMA_ES(HPOptimizer):
             # Now we pass the candidates to the evaluator, fitting them to the model.
             fitnesses = self.evaluate_candidates(bounded_candidates, {})
             es.tell(candidates, fitnesses)
+
+            """Observer"""
+            population = convert_to_inspyred_pop(candidates)
+            ea_support.observer(population, num_generations=i+1, num_evaluations=(i+1)*pop_size, args=None)
 
         """Post optimization procedures."""
 
@@ -93,9 +109,12 @@ class CMA_ES(HPOptimizer):
         # Re-runs the model with the best parameters.
         perf, best_trainer = self.evaluate_candidate(best_individual)
 
-        # We need, also, to set these instance variables to let the Solver access them.
+        # We need, also, to set these instance variables to let the Solver (and app.py, trough solver.hpo_model) access
+        # them.
         self.best_trainer = best_trainer
         self.best_para = best_individual
+        # Diversity.
+        self.diversity = ea_support.get_diversity(convert_to_inspyred_pop((final_pop)))
 
         print('\nFinal population:\n')
         for ind in final_pop:
