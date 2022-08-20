@@ -6,6 +6,21 @@ import numpy as np
 import seaborn as sns
 
 
+"""
+This file should be executed after the 5 runs for each of the 12 EA considered. Then repeat this file execution for each Dataset that
+has been taken in consideration, and for each GNN model.
+
+INPUT
+    - a list of Group Names, which were given as input to WandB, each one representing an experiment, performed internally 5 times.
+
+
+OUTPUT
+    - 12 single plots, each one averaged over 5 runs, representing the Accuracy vs Diversity curves of the EA performed;
+    - 1 global plot, representing the overall comparison of the 12 EA in terms of Test Accuracy, where each algorithm is 
+      categorized as: Exploitative-Explorative-Neutral, depending on its specific EA hyperparameters. 
+"""
+
+
 def getAlgTag(group:str, config:dict):
 
     final = {}
@@ -31,7 +46,7 @@ def getAlgTag(group:str, config:dict):
             final['Name'] = 'DE'
             final['Tag'] = 'Neutral'
         else:
-            final['Name'] = 'DE-Exlporative'
+            final['Name'] = 'DE-Explorative'
             final['Tag'] = 'Explorative'
 
     elif 'es' in group.lower():
@@ -137,7 +152,7 @@ def comparison_plot(alg_list:list):
     df = pd.DataFrame(alg_list)
 
     # Data preparation
-    # Create as many colors as there are unique midwest['category']
+    # Create as many colors as there are unique df['Name']
     categories = np.unique(df['Name'])
     colors = [plt.cm.tab10(i/float(len(categories)-1)) for i in range(len(categories))]
 
@@ -156,17 +171,23 @@ def comparison_plot(alg_list:list):
     plt.legend(fontsize=12)    
     plt.show()  
 
+    return
 
 
-def main():
+
+def main(run_names:list()):
+
+    """
+    Example of the input: 
+        run_names = ['GA Test - Neutral Setting', 'ES-plus Test - Explorative Setting', 'ES-comma Test - Explorative Setting']
+    """
 
     alg_list = []
-    run_name = ['GA Test - Neutral Setting', 'ES-plus Test - Explorative Setting', 'ES-comma Test - Explorative Setting']
-
-    for exp in run_name:
-        _, alg_tag = wandb_api(exp)
+    
+    for exp in run_names:
+        df, alg_tag = wandb_api(exp)
+        plot_acc_div(df, exp)
         alg_list.append(alg_tag)
-        
         
     comparison_plot(alg_list)
     return

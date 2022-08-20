@@ -15,7 +15,7 @@ import autogl_ea.settings.wandb_settings
 import autogl_ea.settings.config as cfg
 
 
-def main():
+def main(runs:int=5):
     """
     Command line arguments parser, WanDB initializer, launcher.
     """
@@ -53,14 +53,17 @@ def main():
 
     # You need to edit settings/wandb_settings.py, specifying WANDB_ENTITY (username), WANDB_API_KEY, etc.
     wandb_run_name = 'alg: {}, ds: {}, gm: {}, hl: {}, problem: {}'.format(alg, dataset, graph_model, hl, problem)
-    # YAML config file.
-    wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group='Initial Tests')
 
-    # Command line launcher.
-    app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
+    for run in runs:
 
-    # Manual launcher.
-    # app.launch(alg='ES_comma', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
+        # YAML config file.
+        wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group='Initial Tests')
+
+        # Command line launcher.
+        app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
+
+        # Manual launcher.
+        # app.launch(alg='ES_comma', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
 
 
 if __name__ == '__main__':
