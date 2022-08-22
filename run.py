@@ -4,6 +4,7 @@ Authors: Mattia Florio, Stefano Pardini
 
 This module is the entry point of the program, it is responsible for parsing the command line parameters, launching
 functions from autogl_ea.app package.
+It has to be eventually executed after the execution of set_ea_hp.py module.
 """
 
 import os
@@ -15,7 +16,7 @@ import autogl_ea.settings.wandb_settings
 import autogl_ea.settings.config as cfg
 
 
-def main(runs:int=5):
+def main():
     """
     Command line arguments parser, WanDB initializer, launcher.
     """
@@ -29,6 +30,11 @@ def main(runs:int=5):
     parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph; default=node')
 
     parser.add_argument('-wandb', type=bool, default=True, help='Log results on WandB; default=False')
+    parser.add_argument('-wandb_group_name', type=str, default='Final experiments', help='WandB group name; '
+                                                                                         'default=Final Experiments')
+
+    parser.add_argument('-runs', type=int, default=5, help='Number of executions to be performed for the selected'
+                                                           ' algorithm;; default=5')
     args = parser.parse_args()
 
     if args.wandb == 'False':
@@ -43,6 +49,7 @@ def main(runs:int=5):
     assert args.graph_model in ['gcn', 'gat'], 'Graph model not found.'
     assert 10 >= args.hl >= 1, 'Invalid number of hidden layers.'
     assert args.problem in ['node', 'graph'], 'Kind of problem not found.'
+    assert 0 >= args.hl >= 20, 'Invalid number of runs.'
 
     # Parameters got from the command line parser.
     alg = args.alg
@@ -50,14 +57,16 @@ def main(runs:int=5):
     graph_model = args.graph_model
     hl = args.hl
     problem = args.problem
+    wandb_group_name = args.wandb_group_name
+    n_runs = args.runs
 
     # You need to edit settings/wandb_settings.py, specifying WANDB_ENTITY (username), WANDB_API_KEY, etc.
     wandb_run_name = 'alg: {}, ds: {}, gm: {}, hl: {}, problem: {}'.format(alg, dataset, graph_model, hl, problem)
 
-    for run in runs:
+    for run in n_runs:
 
         # YAML config file.
-        wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group='Initial Tests')
+        wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group=wandb_group_name)
 
         # Command line launcher.
         app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
