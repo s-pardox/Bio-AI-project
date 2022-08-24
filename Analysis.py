@@ -1,4 +1,5 @@
 import wandb
+import csv
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -168,11 +169,28 @@ def comparison_plot(alg_list:list):
 
     plt.xticks(fontsize=12); plt.yticks(fontsize=12)
     plt.title("EA Approach - Explorative vs Neutral vs Exploitative", fontsize=22)
-    plt.legend(fontsize=12)    
+    plt.legend(fontsize=12)  
+    plt.savefig('comparison.png')  
     plt.show()  
 
     return
 
+def save_best_decoded_individual(group_name:str, test_acc:int, trainer:dict, model:dict):
+
+    final = {"Test_Acc": test_acc}
+    final.update(trainer)
+    final.update(model)
+
+    final = {'early_stopping' if k == 'early_stopping_round' else k:v for k,v in final.items()}
+    final = {'hidden_nodes' if k == 'hidden' else k:v for k,v in final.items()}
+    final['hidden_nodes'] = final['hidden_nodes'][0]
+
+    with open('{name}.csv'.format(name=group_name), "a", newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=final.keys())
+        writer.writeheader()
+        writer.writerow(final)
+
+    return
 
 
 def main(run_names:list()):

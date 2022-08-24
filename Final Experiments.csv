@@ -1,0 +1,4 @@
+Test_Acc,max_epoch,early_stopping,lr,weight_decay,num_layers,hidden_nodes,dropout,act
+0.788,238,13,0.035665359370203806,0.0001,2,16,0.2,leaky_relu
+Test_Acc,max_epoch,early_stopping,lr,weight_decay,num_layers,hidden_nodes,dropout,act
+0.794,190,20,0.02566076599116093,0.0003810468028737897,2,16,0.42646211065554135,tanh

@@ -35,7 +35,8 @@ def launch(alg='GA', dataset='cora', graph_model=None, hidden_layers=1, problem=
     ss_mng = SearchSpaceMng(ss.SEARCH_SPACE)
     search_space = ss_mng.modify_ss_by_hl(hidden_layers)
 
-    __solve(optimizer, dataset, graph_model, search_space, device, problem)
+    acc, trainer, model = __solve(optimizer, dataset, graph_model, search_space, device, problem)
+    return acc, trainer, model
 
 
 def __solve(optimizer, dataset, graph_model, search_space, device, problem):
@@ -123,4 +124,9 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
     print('\nAutoGL best parameters for trainer (decoded):\n{}'.format(optimizer.best_trainer.hyper_parameters))
     print('\nAutoGL best parameters for model (decoded):\n{}'.format(optimizer.best_trainer.model.hyper_parameters))
 
+    trainer = optimizer.best_trainer.hyper_parameters
+    model = optimizer.best_trainer.model.hyper_parameters
+
     print('\nFinal population diversity:\n{}'.format(solver.hpo_module.diversity))
+
+    return acc, trainer, model
