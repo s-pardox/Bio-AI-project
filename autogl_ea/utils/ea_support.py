@@ -122,7 +122,7 @@ class EASupport:
 
         def num_format(stats):
             for stat in stats:
-                stats[stat] = '{0:>10}'.format(stats[stat])[:10]
+                stats[stat] = float('{0:>10}'.format(stats[stat])[:10])
             return stats
 
         # Accuracy and diversity statistics.
@@ -141,8 +141,8 @@ class EASupport:
         wandb_div_stats = {}
         for stat in div_stats:
             wandb_div_stats['{}_div'.format(stat)] = div_stats[stat]
-
-        # Merges the 2 dictionaries in order to produce a single call to WandB
+            
+        # Merges the 2 dictionaries in order to produce a single call to WandB.
         wandb.log(wandb_acc_stats | wandb_div_stats)
 
     def get_diversity(self, population):
