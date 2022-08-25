@@ -142,8 +142,8 @@ class EASupport:
         for stat in div_stats:
             wandb_div_stats['{}_div'.format(stat)] = div_stats[stat]
 
-        wandb.log(wandb_acc_stats)
-        wandb.log(wandb_div_stats)
+        # Merges the 2 dictionaries in order to produce a single call to WandB
+        wandb.log(wandb_acc_stats | wandb_div_stats)
 
     def get_diversity(self, population):
         """This method has been inspyred by inspyred.ec.terminators.py module.
