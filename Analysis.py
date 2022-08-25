@@ -4,14 +4,14 @@ import csv
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 
 """
-This file should be executed after the 5 runs for each of the 12 EA considered. Then repeat this file execution for each Dataset that
-has been taken in consideration, and for each GNN model.
+This file should be executed after the 5 runs for each of the 12 EA considered. Then repeat this file execution for 
+each Dataset that has been taken in consideration, and for each GNN model.
 
 INPUT
-    - a list of Group Names, which were given as input to WandB, each one representing an experiment, performed internally 5 times.
+    - a list of Group Names, which were given as input to WandB, each one representing an experiment, performed
+    internally 5 times.
 
 
 OUTPUT
@@ -20,8 +20,11 @@ OUTPUT
       categorized as: Exploitative-Explorative-Neutral, depending on its specific EA hyperparameters. 
 """
 
+WANDB_ENTITY = 'bio-ai-2022'
+WANDB_PROJECT = 'AutoGL-EA'
 
-def getAlgTag(group: str, config: dict):
+
+def get_alg_tag(group: str, config: dict):
     final = {}
 
     if 'ga' in group.lower():
@@ -79,7 +82,7 @@ def getAlgTag(group: str, config: dict):
 def wandb_api(group: str):
     # WandB API call
     api = wandb.Api()
-    runs = api.runs('bio-ai-2022/AutoGL-EA', filters={'group': group})
+    runs = api.runs(WANDB_ENTITY + '/' + WANDB_PROJECT, filters={'group': group})
 
     # store experiment configuration
     config = runs[0].config
@@ -105,7 +108,7 @@ def wandb_api(group: str):
     df_means.index = df_means.index + 1
 
     # create qualitative variable
-    alg_tag = getAlgTag(group, config)
+    alg_tag = get_alg_tag(group, config)
     alg_tag['Accuracy'] = best_test_acc
 
     return df_means, alg_tag
@@ -160,9 +163,9 @@ def comparison_plot(alg_list: list):
                     s=50, c=np.array(colors[i]).reshape((1, 4)), label=str(category))
 
     # Decorations
-    plt.gca().set(xlabel='Algorithm Aprroach', ylabel='Accuracy')
+    plt.gca().set(xlabel='Algorithm Approach', ylabel='Accuracy')
 
-    plt.xticks(fontsize=12);
+    plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     plt.title('EA Approach - Explorative vs Neutral vs Exploitative', fontsize=22)
     plt.legend(fontsize=12)
@@ -173,7 +176,7 @@ def comparison_plot(alg_list: list):
 
 
 def save_best_decoded_individual(group_name: str, test_acc: int, trainer: dict, model: dict):
-    final = {'Test_Acc': test_acc}
+    final = {'group_name': group_name, 'Test_Acc': test_acc}
     final.update(trainer)
     final.update(model)
 
@@ -181,7 +184,7 @@ def save_best_decoded_individual(group_name: str, test_acc: int, trainer: dict, 
     final = {'hidden_nodes' if k == 'hidden' else k: v for k, v in final.items()}
     final['hidden_nodes'] = final['hidden_nodes'][0]
 
-    with open('{name}.csv'.format(name=group_name), 'a', newline='') as f:
+    with open('report/runs.csv'.format(name=group_name), 'a', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=final.keys())
         writer.writeheader()
         writer.writerow(final)
@@ -191,8 +194,8 @@ def save_best_decoded_individual(group_name: str, test_acc: int, trainer: dict, 
 
 def main(run_names: list()):
     """
-    Example of the input: 
-        run_names = ['GA Test - Neutral Setting', 'ES-plus Test - Explorative Setting', 'ES-comma Test - Explorative Setting']
+    Example of the input: run_names = ['GA Test - Neutral Setting', 'ES-plus Test - Explorative Setting',
+    'ES-comma Test - Explorative Setting']
     """
 
     alg_list = []

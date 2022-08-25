@@ -31,8 +31,8 @@ def main():
     parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph; default=node')
 
     parser.add_argument('-wandb', type=bool, default=True, help='Log results on WandB; default=False')
-    parser.add_argument('-wandb_group_name', type=str, default='Final Experiments', help='WandB group name; '
-                                                                                         'default=Final Experiments')
+    parser.add_argument('-wandb_group_name', type=str, default='Ste * Final Experiments',
+                        help='WandB group name; default=Final Experiments')
 
     args = parser.parse_args()
 

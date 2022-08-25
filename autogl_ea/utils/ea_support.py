@@ -141,7 +141,7 @@ class EASupport:
         wandb_div_stats = {}
         for stat in div_stats:
             wandb_div_stats['{}_div'.format(stat)] = div_stats[stat]
-            
+
         # Merges the 2 dictionaries in order to produce a single call to WandB.
         wandb.log(wandb_acc_stats | wandb_div_stats)
 
@@ -166,7 +166,7 @@ class EASupport:
         distance = list(filter(lambda a: a != 0.0, distance))
 
         stats = {'min': min(distance), 'max': max(distance), 'med': statistics.median(distance),
-                'avg': statistics.mean(distance), 'std': statistics.stdev(distance)}
+                 'avg': statistics.mean(distance), 'std': statistics.stdev(distance)}
 
         for stat in stats:
             stats[stat] = '{0:>10}'.format(stats[stat])[:10]
