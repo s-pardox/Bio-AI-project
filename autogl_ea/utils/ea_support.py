@@ -122,7 +122,7 @@ class EASupport:
 
         def num_format(stats):
             for stat in stats:
-                stats[stat] = '{0:>10}'.format(stats[stat])[:10]
+                stats[stat] = float('{0:>10}'.format(stats[stat])[:10])
             return stats
 
         # Accuracy and diversity statistics.
@@ -142,8 +142,8 @@ class EASupport:
         for stat in div_stats:
             wandb_div_stats['{}_div'.format(stat)] = div_stats[stat]
 
-        wandb.log(wandb_acc_stats)
-        wandb.log(wandb_div_stats)
+        # Merges the 2 dictionaries in order to produce a single call to WandB.
+        wandb.log(wandb_acc_stats | wandb_div_stats)
 
     def get_diversity(self, population):
         """This method has been inspyred by inspyred.ec.terminators.py module.
@@ -166,7 +166,7 @@ class EASupport:
         distance = list(filter(lambda a: a != 0.0, distance))
 
         stats = {'min': min(distance), 'max': max(distance), 'med': statistics.median(distance),
-                'avg': statistics.mean(distance), 'std': statistics.stdev(distance)}
+                 'avg': statistics.mean(distance), 'std': statistics.stdev(distance)}
 
         for stat in stats:
             stats[stat] = '{0:>10}'.format(stats[stat])[:10]

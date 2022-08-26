@@ -31,11 +31,9 @@ def main():
     parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph; default=node')
 
     parser.add_argument('-wandb', type=bool, default=True, help='Log results on WandB; default=False')
-    parser.add_argument('-wandb_group_name', type=str, default='Final Experiments', help='WandB group name; '
-                                                                                         'default=Final Experiments')
+    parser.add_argument('-wandb_group_name', type=str, default='Ste * Final Experiments',
+                        help='WandB group name; default=Final Experiments')
 
-    parser.add_argument('-runs', type=int, default=5, help='Number of executions to be performed for the selected'
-                                                           ' algorithm;; default=5')
     args = parser.parse_args()
 
     if args.wandb == 'False':
@@ -50,7 +48,6 @@ def main():
     assert args.graph_model in ['gcn', 'gat'], 'Graph model not found.'
     assert 10 >= args.hl >= 1, 'Invalid number of hidden layers.'
     assert args.problem in ['node', 'graph'], 'Kind of problem not found.'
-    assert 0 <= args.runs <= 20, 'Invalid number of runs.'
 
     # Parameters got from the command line parser.
     alg = args.alg
@@ -59,34 +56,23 @@ def main():
     hl = args.hl
     problem = args.problem
     wandb_group_name = args.wandb_group_name
-    n_runs = args.runs
 
     # You need to edit settings/wandb_settings.py, specifying WANDB_ENTITY (username), WANDB_API_KEY, etc.
     wandb_run_name = 'alg: {}, ds: {}, gm: {}, hl: {}, problem: {}'.format(alg, dataset, graph_model, hl, problem)
 
-    best_test_acc = 0
-    best_trainer = {}
-    best_model = {}
+    # YAML config file.
+    wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group=wandb_group_name)
 
-    for run in range(n_runs):
+    # Command line launcher.
+    test_acc, trainer, model = app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl,
+                                          problem=problem)
 
-        # YAML config file.
-        wandb.init(project='AutoGL-EA', name=wandb_run_name, entity='bio-ai-2022', group=wandb_group_name)
+    # Manual launcher.
+    # test_acc, trainer, model = app.launch(alg='ES_comma', dataset='cora', graph_model=['gcn'], hidden_layers=1,
+    #                                      problem='node')
 
-        # Command line launcher.
-        test_acc, trainer, model = app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl, problem=problem)
+    save_best_decoded_individual(wandb_group_name, test_acc, trainer, model)
 
-        # Manual launcher.
-        # test_acc, best_trainer, best_model = app.launch(alg='ES_comma', dataset='cora', graph_model=['gcn'], hidden_layers=1, problem='node')
 
-        if test_acc > best_test_acc:
-            best_test_acc = test_acc
-            best_trainer = trainer
-            best_model = model
-
-    # do something with best_test_acc, best_trainer, best_model
-
-    save_best_decoded_individual(wandb_group_name, best_test_acc, best_trainer, best_model)
-    
 if __name__ == '__main__':
     main()
