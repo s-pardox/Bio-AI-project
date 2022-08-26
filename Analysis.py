@@ -50,7 +50,7 @@ def getAlgTag(group:str, config:dict):
             final['Name'] = 'DE-Explorative'
             final['Tag'] = 'Explorative'
 
-    elif 'es' in group.lower():
+    elif 'es' in group.lower() and 'cma' not in group.lower():
 
         if 'plus' in group.lower():
             final['Name'] = 'ES-plus'
@@ -99,7 +99,12 @@ def wandb_api(group:str):
     #delete unuseful rows and columns
     list_df_final = []
     for df in list_df_original:
-        df_final = df.iloc[:15, [0, 5, 8, 11]]
+        df_final = df.iloc[:15, [0, 9, 7, 11]]
+
+        if 'CMA' in group:
+            df_final['mean_fit'] = df_final['mean_fit'].abs()
+
+        df_final = df_final.rename(columns={"mean_fit": "avg_fit"})
         list_df_final.append(df_final)
 
     #merge the multiple DFs into one, averaging element-wise values
@@ -114,64 +119,80 @@ def wandb_api(group:str):
     return df_means, alg_tag
 
 
-def plot_acc_div(df:pd.DataFrame, group:str):
+def plot_acc_div(alg_list:list, run_names:list, title:str):
 
-    x = df.index
-    y1 = df.avg_fit
-    y2 = df.avg_div
+    n_cols = 3
+    n_rows = 3
 
-    fig, ax1 = plt.subplots(1, 1, figsize=(16, 7), dpi=50)
-    ax1.plot(x, y1, color="tab:red")
-    ax1.fill_between(x, y1 + (df.std_fit*0.1), y1 - (df.std_fit*0.1), alpha = 0.2, color="tab:red")
+    fig, axes = plt.subplots(n_cols, n_rows, figsize=(32, 18), dpi=50)
+    plt.subplots_adjust(wspace=0.25, hspace=0.4)
 
-    ax2 = ax1.twinx()
-    ax2.plot(x, y2, color="tab:blue")
-    ax2.fill_between(x, y2 + (df.std_div*0.1), y2 - (df.std_div*0.1), alpha = 0.2, color="tab:blue")
+    #alg_list[count].plot(ax=axes[r,c])
 
-    # ax1 (left y axis)
-    ax1.set_xlabel("Generations", fontsize=20)
-    ax1.set_ylabel("Accuracy", color="tab:red", fontsize=20)
-    ax1.tick_params(axis="y", rotation=0, labelcolor="tab:red")
+    count=0
+    for r in range(n_rows):
+        for c in range(n_cols):
 
-    # ax2 (right Y axis)
-    ax2.set_ylabel("Diversity", color="tab:blue", fontsize=20)
-    ax2.tick_params(axis="y", labelcolor="tab:blue")
-    ax2.set_title(
-        "{group} - Accuracy vs Diversity".format(group=group), fontsize=20
-    )
-    ax2.set_xticks(np.arange(1, len(x) + 1, 1))
-    ax2.set_xticklabels(x[::1], rotation=90, fontdict={"fontsize": 10})
-    
-    plt.savefig('{group}.png'.format(group=group))
+            df = alg_list[count]
+            group = run_names[count]
+
+            x = df.index
+            y1 = df.avg_fit
+            y2 = df.avg_div
+
+            axes[r,c].plot(x, y1, color="tab:red")
+            axes[r,c].fill_between(x, y1 + (df.std_fit*0.2), y1 - (df.std_fit*0.2), alpha = 0.2, color="tab:red")
+
+            ax2 = axes[r,c].twinx()
+            ax2.plot(x, y2, color="tab:blue")
+            ax2.fill_between(x, y2 + (df.std_div*0.1), y2 - (df.std_div*0.1), alpha = 0.2, color="tab:blue")
+
+            # ax1 (left y axis)
+            axes[r,c].set_xlabel("Generations", fontsize=20)
+            axes[r,c].set_ylabel("Accuracy", color="tab:red", fontsize=20)
+            axes[r,c].tick_params(axis="y", rotation=0, labelcolor="tab:red")
+
+            # ax2 (right Y axis)
+            ax2.set_ylabel("Diversity", color="tab:blue", fontsize=20)
+            ax2.tick_params(axis="y", labelcolor="tab:blue")
+            ax2.set_title(
+                "{group} - Accuracy vs Diversity".format(group=group), fontsize=20
+            )
+            ax2.set_xticks(np.arange(1, len(x) + 1, 1))
+            ax2.set_xticklabels(x[::1], rotation=90, fontdict={"fontsize": 10})
+
+            count+=1
+
+    plt.savefig('{group}.png'.format(group=title))
     plt.show()
 
     return
 
 
-def comparison_plot(alg_list:list):
+def comparison_plot(alg_tags:list, title:str):
 
-    df = pd.DataFrame(alg_list)
+    df = pd.DataFrame(alg_tags)
 
     # Data preparation
     # Create as many colors as there are unique df['Name']
-    categories = np.unique(df['Name'])
+    categories = df['Name']
     colors = [plt.cm.tab10(i/float(len(categories)-1)) for i in range(len(categories))]
 
     # Draw Plot for Each Category
-    plt.figure(figsize=(10, 8), dpi=72, facecolor='w', edgecolor='k')
+    plt.figure(figsize=(24, 10), dpi=72, facecolor='w', edgecolor='k')
     for i, category in enumerate(categories):
         plt.scatter('Tag', 'Accuracy', 
                     data=df.loc[df.Name==category, :], 
                     s=50, c=np.array(colors[i]).reshape((1,4)), label=str(category))
+        plt.text(x = df.Tag[i], y = df.Accuracy[i]+0.0005, s = category, horizontalalignment='center', fontsize='medium')
 
     # Decorations
     plt.gca().set(xlabel='Algorithm Aprroach', ylabel='Accuracy')
-
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=6, fancybox=True, shadow=True)
     plt.xticks(fontsize=12); plt.yticks(fontsize=12)
-    plt.title("EA Approach - Explorative vs Neutral vs Exploitative", fontsize=22)
-    plt.legend(fontsize=12)  
-    plt.savefig('comparison.png')  
-    plt.show()  
+    plt.title("Cora Dataset, GCN problem : Explorative vs Neutral vs Exploitative", fontsize=18, x=0.5, y=1.1)
+    plt.savefig('comparison_{group}.png'.format(group=title))
+    plt.show()
 
     return
 
@@ -201,15 +222,19 @@ def main(run_names:list()):
     """
 
     alg_list = []
+    alg_tags = []
     
     for exp in run_names:
         df, alg_tag = wandb_api(exp)
-        plot_acc_div(df, exp)
-        alg_list.append(alg_tag)
-        
-    comparison_plot(alg_list)
+        alg_list.append(df)
+        alg_tags.append(alg_tag)
+
+    plot_acc_div(alg_list, run_names, 'CORA-GCN')    
+    comparison_plot(alg_tags, 'CORA-GCN')
     return
 
 
 if __name__ == '__main__':
-    main()
+    list_name = ['Ste_test_CORA-GCN_GA-Exploitative', 'CORA-GCN_GA-Neutral', 'CORA-GCN_GA-Explorative', 'CORA-GCN_DE-Exploitative', 'CORA-GCN_DE-Neutral',
+                 'CORA-GCN_DE-Explorative', 'CORA-GCN_ES-comma', 'CORA-GCN_ES-plus', 'CORA-GCN_CMA-ES']
+    main(list_name)
