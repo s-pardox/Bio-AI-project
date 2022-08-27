@@ -1,7 +1,0 @@
-"Name","State","Notes","User","Tags","Created","Runtime","Sweep","crossover_rate","mutation_rate","pop_size","avg_fit","best_fit","med_fit","std_fit","worst_fit"
-"alg: GA, ds: cora, gm: gcn, hl: 1, problem: node","finished","-","mattia921","","2022-08-09T16:58:19.000Z","211","","0.7","0.4","10","0.7878","0.798","0.789","0.00756042","0.774"
-"alg: GA, ds: cora, gm: gcn, hl: 1, problem: node","finished","-","mattia921","","2022-08-09T16:53:16.000Z","187","","0.7","0.35","10","0.7918","0.802","0.792","0.00666033","0.782"
-"alg: GA, ds: cora, gm: gcn, hl: 1, problem: node","finished","-","mattia921","","2022-08-09T16:47:36.000Z","207","","0.7","0.3","10","0.7994","0.806","0.8","0.00473708","0.79"
-"alg: GA, ds: cora, gm: gcn, hl: 1, problem: node","finished","-","mattia921","","2022-08-09T16:42:11.000Z","210","","0.7","0.25","10","0.79299999","0.798","0.794","0.00449444","0.786"
-"alg: GA, ds: cora, gm: gcn, hl: 1, problem: node","finished","-","mattia921","","2022-08-09T16:37:28.000Z","199","","0.7","0.2","10","0.7946","0.806","0.796","0.00867409","0.774"
-"alg: GA, ds: cora, gm: gcn, hl: 1, problem: node","finished","-","mattia921","","2022-08-09T16:32:14.000Z","201","","0.7","0.15","10","0.7884","0.798","0.788","0.00436348","0.78"

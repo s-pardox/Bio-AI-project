@@ -172,29 +172,44 @@ def plot_acc_div(alg_list:list, run_names:list, title:str):
 
 
 def comparison_plot(alg_tags:list, title:str):
-
     df = pd.DataFrame(alg_tags)
+    df.sort_values(by='Accuracy', ascending=False, inplace=True)
 
-    # Data preparation
-    # Create as many colors as there are unique df['Name']
-    categories = df['Name']
-    colors = [plt.cm.tab10(i/float(len(categories)-1)) for i in range(len(categories))]
+    labels = df.Tag.unique()
 
-    # Draw Plot for Each Category
-    plt.figure(figsize=(24, 10), dpi=72, facecolor='w', edgecolor='k')
-    for i, category in enumerate(categories):
-        plt.scatter('Tag', 'Accuracy', 
-                    data=df.loc[df.Name==category, :], 
-                    s=50, c=np.array(colors[i]).reshape((1,4)), label=str(category))
-        plt.text(x = df.Tag[i], y = df.Accuracy[i]+0.0005, s = category, horizontalalignment='center', fontsize='medium')
-        
+    x = np.arange(len(labels))
+    width = 0.1
 
+    fig, ax = plt.subplots(figsize=(18,9), dpi=50)
 
-    # Decorations
-    plt.gca().set(xlabel='Algorithm Aprroach', ylabel='Accuracy')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=6, fancybox=True, shadow=True)
-    plt.xticks(fontsize=12); plt.yticks(fontsize=12)
-    plt.title("Cora Dataset, GCN problem : Explorative vs Neutral vs Exploitative", fontsize=18, x=0.5, y=1.1)
+    for i, tag in enumerate(labels):
+        df_small = df.loc[df.Tag == tag, :]
+        count = 0
+        for alg in df_small.values:
+            if count == 0:
+                rect1 = ax.bar(x[i] - 1.5*width, alg[2], width, label=alg[0])
+                plt.text(x[i] - 1.5*width, alg[2]+0.0005, s = alg[0], horizontalalignment='left', fontsize='medium')
+            elif count == 1:
+                rect2 = ax.bar(x[i] - width/2, alg[2], width, label=alg[0])
+                plt.text(x[i] - width/2, alg[2]+0.0005, s = alg[0], horizontalalignment='left', fontsize='medium')
+            elif count == 2:
+                rect3 = ax.bar(x[i] + width/2, alg[2], width, label=alg[0])
+                plt.text(x[i] + width/2, alg[2]+0.0005, s = alg[0], horizontalalignment='left', fontsize='medium')
+            else:
+                rect4 = ax.bar(x[i] + 1.5*width, alg[2], width, label=alg[0])
+                plt.text(x[i] + 1.5*width, alg[2]+0.0005, s = alg[0], horizontalalignment='left', fontsize='medium')
+            count += 1
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_xlabel('Algorithm Aprroach')
+    ax.set_ylabel('Accuracy')
+    ax.set_title("Cora Dataset, GCN problem : Explorative vs Neutral vs Exploitative", fontsize=18)
+    ax.set_xticks(x, labels)
+    ax.set_ylim(0.78, 0.83)
+    ax.legend()
+
+    fig.tight_layout()
+
     plt.savefig('comparison_{group}.png'.format(group=title))
     plt.show()
 
@@ -234,7 +249,7 @@ def main(run_names:list()):
 
     plot_acc_div(alg_list, run_names, 'CORA-GCN')    
     comparison_plot(alg_tags, 'CORA-GCN')
-    return
+    
 
 
 if __name__ == '__main__':
