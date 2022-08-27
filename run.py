@@ -14,7 +14,7 @@ import wandb
 import autogl_ea.app as app
 import autogl_ea.settings.wandb_settings
 import autogl_ea.settings.config as cfg
-from Analysis import save_best_decoded_individual
+from eda import save_best_decoded_individual
 
 
 def main():
