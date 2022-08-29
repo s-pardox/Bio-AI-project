@@ -1,14 +1,16 @@
 # Bio-Inspired AI project - UniTN 2021/22
 
-TODO: Introduction, brief description of the project.
+The aim of this project was to apply evolutionary algorithms (EAs) to AutoGL: a class of nature-inspired population-based stochastic search algorithms applied to AutoGL (i.e. Auto Graph Learning), an automatic machine learning (AutoML) toolkit specified for graph datasets and tasks.
+EAs are so diverse, as well as their parametrization that could be summarized in the well known exploration-exploitation trade-off, that researchers may find it difficult to choose which algorithm and parameters should be used.
+In addition to technically converging two Python packages (Inspyred and AutoGL), we also pre-parameterized various execution regimes, so that it was possible to compare different algorithms characterized by a superior / inferior exploration / exploitation attitude.
 
 ### Available algorithms
 
 1. GA: Genetic Algorithm
-2. PSO: Particle Swarm Optimization,
-3. DE: Differential Evolution,
-4. ES_plus: (μ + λ) Evolution Strategy,
-5. ES_comma: (μ, λ) Evolution Strategy,
+2. PSO: Particle Swarm Optimization
+3. DE: Differential Evolution
+4. ES_plus: (μ + λ) Evolution Strategy
+5. ES_comma: (μ, λ) Evolution Strategy
 6. CMA-ES: Covariance Matrix Adaptation - Evolution Strategy
 
 ### Virtual environment setup and requirements
@@ -83,18 +85,35 @@ functions from autogl_ea.app package, activating the evolutionary process for th
 * `-problem`: Classification options: node, graph; default=node
 * `-wandb`: Log results on WandB; default=False
 * `-wandb_group_name`: 'WandB group name; default=Final Experiments
-* `-runs`: Number of executions to be performed for the selected algorithm; default=5
 
 The program will check automatically if a GPU is available for the task. If not, the CPU will be used to complete the adaptation.
 
-### 3. Analysis: generation of graphs and statistics
+In the case you need to run more than one experiment at time, you can automatize the overall execution by using a simple bash script.
 
-TODO.
+```
+#!/bin/bash
+python set_ea_hp.py -alg GA -max_eval 450 -pop_size 30 -cr_rate 0.95 -mu_rate 0.05
+for i in {1..5}
+do
+   python run.py -alg GA -wandb_group_name CORA-GCN_GA-Exploitative
+done
+```
+
+By default, every run produces few output lines on the screen and, at the end, saves the most relevant statistics on an external CSV file, inside the report/ folder.
+
+### 3. Analysis: exploratory data analysis.
+
+As third and final step, we developed a module to take care of data analysis, extracting data from WandB with the aim to generate summary aggregated graphs as well individual accuracy/diversity graphs. 
+All the plots will be stored into the report/ folder.
+
+```
+python3 eda.py
+```
 
 ### WandB Credentials
 
-To store run results in a WandB instance, edit the template file stored in `autogl_wa/settings/wandb_settings.py.template` 
-with the desired credentials, as well as the `run.py` file with the proper run names (and entities).
+Our project makes massive use of WandB. Edit the template file located in `autogl_wa/settings/wandb_settings.py.template` 
+with the desired credentials, as well as the `run.py` and `eda.py` file with the proper run names (and entities).
 
 ## Results
 
