@@ -5,7 +5,6 @@ import time
 
 from autogl_ea.optimizers import HPOptimizer
 from autogl_ea.utils import EASupport
-from autogl_ea.utils import SearchSpaceBounder
 
 
 class GA(HPOptimizer):

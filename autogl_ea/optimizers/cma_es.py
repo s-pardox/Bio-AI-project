@@ -9,6 +9,7 @@ from autogl_ea.utils import SearchSpaceBounder
 
 from inspyred.ec.ec import Individual
 
+
 class CMA_ES(HPOptimizer):
     """Covariance matrix adaptation evolution strategy"""
 
@@ -90,7 +91,7 @@ class CMA_ES(HPOptimizer):
 
             """Observer"""
             population = convert_to_inspyred_pop(candidates)
-            ea_support.observer(population, num_generations=i+1, num_evaluations=(i+1)*pop_size, args=None)
+            ea_support.observer(population, num_generations=i + 1, num_evaluations=(i + 1) * pop_size, args=None)
 
         """Post optimization procedures."""
 
@@ -114,7 +115,7 @@ class CMA_ES(HPOptimizer):
         self.best_trainer = best_trainer
         self.best_para = best_individual
         # Diversity.
-        self.diversity = ea_support.get_diversity(convert_to_inspyred_pop((final_pop)))
+        self.diversity = ea_support.get_diversity(convert_to_inspyred_pop(final_pop))
 
         print('\nFinal population:\n')
         for ind in final_pop:

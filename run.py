@@ -25,13 +25,13 @@ def main():
     parser = argparse.ArgumentParser(description='AutoGL-EA')
     parser.add_argument('-alg', type=str, default='GA',
                         help='Options: GA, PSO, DE, ES_plus, ES_comma, CMA-ES; default=GA')
-    parser.add_argument('-dataset', type=str, default='cora', help='Options: cora, proteins; default=cora')
+    parser.add_argument('-dataset', type=str, default='cora', help='Options: cora, citeseer; default=cora')
     parser.add_argument('-graph_model', type=str, default='gcn', help='Options: gcn, gat; default=gcn')
     parser.add_argument('-hl', type=int, default=1, help='The number of hidden layers to be used; default=1')
     parser.add_argument('-problem', type=str, default='node', help='Classification options: node, graph; default=node')
 
     parser.add_argument('-wandb', type=bool, default=True, help='Log results on WandB; default=False')
-    parser.add_argument('-wandb_group_name', type=str, default='Ste * Final Experiments',
+    parser.add_argument('-wandb_group_name', type=str, default='Final Experiments',
                         help='WandB group name; default=Final Experiments')
 
     args = parser.parse_args()
@@ -47,7 +47,7 @@ def main():
     assert args.dataset in ['cora', 'citeseer'], 'Dataset not found.'
     assert args.graph_model in ['gcn', 'gat'], 'Graph model not found.'
     assert 10 >= args.hl >= 1, 'Invalid number of hidden layers.'
-    assert args.problem in ['node', 'graph'], 'Kind of problem not found.'
+    assert args.problem in ['node', 'graph'], 'Problem type not found.'
 
     # Parameters got from the command line parser.
     alg = args.alg
@@ -67,10 +67,11 @@ def main():
     test_acc, trainer, model = app.launch(alg=alg, dataset=dataset, graph_model=[graph_model], hidden_layers=hl,
                                           problem=problem)
 
-    # Manual launcher.
+    # Manual launcher (if needed, comment on the previous launcher).
     # test_acc, trainer, model = app.launch(alg='ES_comma', dataset='cora', graph_model=['gcn'], hidden_layers=1,
     #                                      problem='node')
 
+    # Stores on an external csv the current run statistics; useful for post-analysis.
     save_best_decoded_individual(wandb_group_name, test_acc, trainer, model)
 
 

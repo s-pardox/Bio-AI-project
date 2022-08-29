@@ -58,5 +58,3 @@ class DE(HPOptimizer):
         )
 
         return self.post_Inspyred_optimization(final_pop)
-
-

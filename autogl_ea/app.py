@@ -81,22 +81,6 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
 
         solver.fit(dataset, time_limit=120)
 
-    elif problem == 'graph':
-
-        solver = AutoGraphClassifier(
-            default_trainer='GraphClassificationFull',
-            # graph_models=graph_model,
-            graph_models=['gin'],
-            hpo_module=optimizer,
-            device=device,
-            max_evals=5,
-            trainer_hp_space=search_space['trainer_hp_space'],
-            model_hp_spaces=search_space['model_hp_space']
-        )
-
-        solver.fit(dataset, time_limit=120, train_split=0.8, val_split=0.2)
-
-
     # As default behavior, splits 0.2 of total nodes/graphs for train and 0.4 of nodes/graphs for validation,
     # the rest 0.4 is left for test.
     #
