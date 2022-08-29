@@ -1,8 +1,10 @@
 # Bio-Inspired AI project - UniTN 2021/22
 
 The aim of this project was to apply evolutionary algorithms (EAs) to AutoGL: a class of nature-inspired population-based stochastic search algorithms applied to AutoGL (i.e. Auto Graph Learning), an automatic machine learning (AutoML) toolkit specified for graph datasets and tasks.
+
 EAs are so diverse, as well as their parametrization that could be summarized in the well known exploration-exploitation trade-off, that researchers may find it difficult to choose which algorithm and parameters should be used.
-In addition to technically converging two Python packages (Inspyred and AutoGL), we also pre-parameterized various execution regimes, so that it was possible to compare different algorithms characterized by a superior / inferior exploration / exploitation attitude.
+
+In addition to technically converging two Python packages (Inspyred and AutoGL), we also pre-parameterized various execution regimes, so that it was possible to compare different algorithms characterized by a higher/lower exploration/exploitation attitude.
 
 ### Available algorithms
 
@@ -101,7 +103,7 @@ done
 
 By default, every run produces few output lines on the screen and, at the end, saves the most relevant statistics on an external CSV file, inside the report/ folder.
 
-### 3. Analysis: exploratory data analysis.
+### 3. Exploratory data analysis.
 
 As third and final step, we developed a module to take care of data analysis, extracting data from WandB with the aim to generate summary aggregated graphs as well individual accuracy/diversity graphs. 
 All the plots will be stored into the report/ folder.
