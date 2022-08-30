@@ -2,7 +2,7 @@
 
 The aim of this project was to apply evolutionary algorithms (EAs) to AutoGL: a class of nature-inspired population-based stochastic search algorithms applied to AutoGL (i.e. Auto Graph Learning), an automatic machine learning (AutoML) toolkit specified for graph datasets and tasks.
 
-EAs are so diverse, as well as their parametrization that could be summarized in the well known exploration-exploitation trade-off, that researchers may find it difficult to choose which algorithm and parameters should be used.
+EAs are so diverse, as well as their parametrization (that can be summarized in the well known exploration-exploitation trade-off), that researchers may find it difficult to choose which algorithm and parameters should be used.
 
 In addition to technically converging two Python packages (Inspyred and AutoGL), we also pre-parameterized various execution regimes, so that it was possible to compare different algorithms characterized by a higher/lower exploration/exploitation attitude.
 
@@ -101,9 +101,9 @@ do
 done
 ```
 
-By default, every run produces few output lines on the screen and, at the end, saves the most relevant statistics on an external CSV file, inside the report/ folder.
+By default, every run produces few output lines on the screen and, at the end, it saves the most relevant statistics on an external CSV file (inside the report/ folder), as well on a remote WandB instance.
 
-### 3. Exploratory data analysis.
+### 3. Exploratory data analysis
 
 As third and final step, we developed a module to take care of data analysis, extracting data from WandB with the aim to generate summary aggregated graphs as well individual accuracy/diversity graphs. 
 All the plots will be stored into the report/ folder.
@@ -112,9 +112,19 @@ All the plots will be stored into the report/ folder.
 python3 eda.py
 ```
 
+More precisely, the execution returns:
+    1. a plot consisting of subplots, each corresponding to a specific EA, showing Accuracy vs Diversity;
+    2. a comparative plot of the various algorithms, grouped by Explorative-Exploitative-Neutral regimes.
+
+Moreover, a dedicated script produces a parallel coordinates plot.
+
+```
+python3 report/parcord.py
+```
+
 ### WandB Credentials
 
-Our project makes massive use of WandB. Edit the template file located in `autogl_wa/settings/wandb_settings.py.template` 
+Our implementation makes massive use of WandB. Edit the template file located in `autogl_wa/settings/wandb_settings.py.template` 
 with the desired credentials, as well as the `run.py` and `eda.py` file with the proper run names (and entities).
 
 ## Results
