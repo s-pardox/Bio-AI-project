@@ -80,12 +80,11 @@ def __solve(optimizer, dataset, graph_model, search_space, device, problem):
         )
 
         solver.fit(dataset, time_limit=120)
-
-    # As default behavior, splits 0.2 of total nodes/graphs for train and 0.4 of nodes/graphs for validation,
-    # the rest 0.4 is left for test.
-    #
-    # time_limit: int
-    # The time limit of the whole fit process (in seconds). If set below 0, will ignore time limit. Default ``-1``.
+        # As default behavior, the split training/validation/test is performed using the following default criteria:
+        #   - 20 training samples per class (e.g.: 140 nodes in the case of CORA dataset, 20 randomly sampled from
+        #     each class)
+        #   - 500 validation samples
+        #   - 1000 test samples
 
     """
     # get current leaderboard of the solver
