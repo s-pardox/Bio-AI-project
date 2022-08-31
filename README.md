@@ -1,5 +1,7 @@
 # Bio-Inspired AI project - UniTN 2021/22
 
+## Introduction
+
 The aim of this project was to apply evolutionary algorithms (EAs), as a class of nature-inspired 
 population-based stochastic search algorithms applied, to Auto Graph Learning (AUtoGL), an automatic machine 
 learning toolkit specified for Graph Neural Network (GNN).
@@ -23,7 +25,7 @@ GNN models.
 5. ES_comma: (μ, λ) Evolution Strategy
 6. CMA-ES: Covariance Matrix Adaptation - Evolution Strategy
 
-### Virtual environment setup and requirements
+## Virtual environment setup and requirements
 
 In order to execute the project after the cloning, it is suggested to create a virtual environment and install the 
 required modules.  
@@ -48,7 +50,7 @@ pip install -r requirements.txt
 
 The authors successfully used Python versions 3.9.4 and 3.9.12.
 
-Otherwise, you can set your own running environment with Anaconda.
+Otherwise, you can set up your own execution environment with Anaconda.
 
 ## Usage
 
@@ -163,3 +165,6 @@ The difference of the worst-best algorithms is around 2%.
 
 A more Explorative algorithmic regime seems to be preferable on the Cora dataset, while an Exploitative approach should 
 better fit Citeseer.
+
+**Please refer to the [final report](https://github.com/s-pardox/Bio-AI-project/tree/main/report) for a more 
+comprehensive discussion.**
