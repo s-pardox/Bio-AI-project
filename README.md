@@ -16,6 +16,9 @@ attitude.
 The experimental results showed that EAs could be an effective alternative to the hyperparameter optimization (HPO) of 
 GNN models.
 
+**Please refer to the [final report](https://github.com/s-pardox/Bio-AI-project/blob/main/report/Bio-AI_report.pdf) for 
+a more comprehensive discussion.**
+
 ### Available algorithms
 
 1. GA: Genetic Algorithm
@@ -166,5 +169,5 @@ The difference of the worst-best algorithms is around 2%.
 A more Explorative algorithmic regime seems to be preferable on the Cora dataset, while an Exploitative approach should 
 better fit Citeseer.
 
-**Please refer to the [final report](https://github.com/s-pardox/Bio-AI-project/tree/main/report) for a more 
+**Please refer to the [final report](https://github.com/s-pardox/Bio-AI-project/blob/main/report/Bio-AI_report.pdf) for a more 
 comprehensive discussion.**
