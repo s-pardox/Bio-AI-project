@@ -3,15 +3,15 @@
 ## Introduction
 
 The aim of this project was to apply evolutionary algorithms (EAs), as a class of nature-inspired 
-population-based stochastic search algorithms applied, to Auto Graph Learning (AUtoGL), an automatic machine 
-learning toolkit specified for Graph Neural Network (GNN).
+population-based stochastic search algorithms applied, to Auto Graph Learning 
+([AutoGL](https://github.com/THUMNLab/AutoGL)), an automatic machine learning toolkit specified for Graph Neural Network (GNN).
 
 EAs are so diverse, as well as their parametrization (synthesizable in the well known exploration-exploitation 
 trade-off), that researchers may find it difficult to choose which algorithm and parameters should be used.
 
-In addition to technically converging two Python packages (Inspyred and AutoGL), we also pre-parameterized various 
-execution regimes with the aim to compare different algorithms, characterized by a higher/lower exploration/exploitation 
-attitude.
+In addition to technically converging two Python packages ([Inspyred](https://github.com/aarongarrett/inspyred) and 
+[AutoGL](https://github.com/THUMNLab/AutoGL)), we also pre-parameterized various execution regimes with the aim to 
+compare different algorithms, characterized by a higher/lower exploration/exploitation attitude.
 
 The experimental results showed that EAs could be an effective alternative to the hyperparameter optimization (HPO) of 
 GNN models.
